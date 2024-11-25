@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 
 namespace TestProject
@@ -44,16 +45,14 @@ namespace TestProject
         {
             List<Savas_Araclari> KartListesi = new List<Savas_Araclari>()
             {
-                new Ucak(0, "Hava", 20, 1, 0,"Ucak"),
-                new Obus(0, "Kara", 20, 1,0, "Obus"),
-                new Firakteyn(0, "Deniz", 25, 1, 0, "Firkateyn")
             };
 
             string[ ] cardTypes = { "Hava", "Kara", "Deniz" };
 
 
+
             Random rand = new Random();
-            for (int i = 0; i < 6; i++)
+            for (int i = 0; i < 8; i++)
             {
 
                 string cardType = cardTypes[rand.Next(cardTypes.Length)];
@@ -71,6 +70,7 @@ namespace TestProject
                         break;
                 }
             }
+
 
 
             return KartListesi;

@@ -122,14 +122,16 @@
   <ItemGroup>
     <Resource Include="image\background.jpg" />
     <Resource Include="image\cards.jpg" />
-    <Resource Include="image\Fırkateyn.png" />
     <Resource Include="image\KFS.png" />
     <Resource Include="image\newBack.jpg" />
     <Resource Include="image\newBackground.jpg" />
-    <Resource Include="image\ObusCard.png" />
     <Resource Include="image\Sida.png" />
-    <Resource Include="image\siha.png" />
+    <Resource Include="image\Siha.png" />
     <Resource Include="image\Ucak.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="image\Firkateyn.png" />
+    <Resource Include="image\Obus.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

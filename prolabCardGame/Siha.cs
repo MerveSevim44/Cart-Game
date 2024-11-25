@@ -9,7 +9,7 @@ namespace TestProject
     internal class Siha: Hava_Araclari
     {
 
-        public override string AltSinif { get; set; } ="Siha";
+        public override string AltSinif { get; set; } = "Siha";
         public override int KaraVurusAvantaji { get; set; } = 10;
 
 
