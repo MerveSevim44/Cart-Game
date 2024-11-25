@@ -127,79 +127,30 @@
         </Grid.RenderTransform>
 
 
-        <Canvas>
-            <Image x:Name="KFSP" Source="image/KFS.png" Stretch="Uniform" HorizontalAlignment="Left" VerticalAlignment="Top" Height="202" Width="131" MouseLeftButtonDown="Image_MouseLeftButtonDown" Tag="KFSP" Canvas.Left="49" Canvas.Top="463" />
-            <Image x:Name="FirkateynP" Source="/image/Fırkateyn.png" Stretch="Uniform" HorizontalAlignment="Left" VerticalAlignment="Top" Height="202" Width="131" Margin="253,336,0,0" MouseLeftButtonDown="Image_MouseLeftButtonDown" Tag="FirkateynP"/>
-            <Image x:Name="ObusP" Source="/image/ObusCard.png" Stretch="Uniform" HorizontalAlignment="Left" VerticalAlignment="Top" Height="202" Width="131" Margin="535,399,0,0" MouseLeftButtonDown="Image_MouseLeftButtonDown" Tag="ObusP"/>
-            <Image x:Name="SidaP" Source="/image/Sida.png" Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Top" Height="202" Width="132" MouseLeftButtonDown="Image_MouseLeftButtonDown" Tag="SidaP" Canvas.Left="807" Canvas.Top="340"/>
-            <Image x:Name="SihaP" Source="/image/siha.png" Stretch="Uniform" HorizontalAlignment="Left" VerticalAlignment="Top" Height="202" Width="131" MouseLeftButtonDown="Image_MouseLeftButtonDown" Tag="SihaP" Canvas.Left="1027" Canvas.Top="463"/>
-            <Image x:Name="UcakP" Source="/image/Ucak.png" Stretch="Uniform" HorizontalAlignment="Left" VerticalAlignment="Top" Height="202" Width="131" MouseLeftButtonDown="Image_MouseLeftButtonDown" Tag="UcakP" Canvas.Left="1023" Canvas.Top="257"/>
-            <Image x:Name="KFSC" Source="/image/KFS.png" Stretch="Uniform" HorizontalAlignment="Left" Width="131" Margin="534,31,0,456" MouseLeftButtonDown="Image_MouseLeftButtonDown" Tag="KFSC"/>
-            <Image x:Name="FirakteynC" Source="/image/Fırkateyn.png" Stretch="Uniform" HorizontalAlignment="Left" VerticalAlignment="Top" Height="202" Width="131" MouseLeftButtonDown="Image_MouseLeftButtonDown" Tag="FirakteynC" Canvas.Left="56" Canvas.Top="249"/>
-            <Image x:Name="ObusC" Source="/image/ObusCard.png" Stretch="Uniform" HorizontalAlignment="Left" VerticalAlignment="Top" Height="202" Width="131" Margin="250,75,0,0" MouseLeftButtonDown="Image_MouseLeftButtonDown" Tag="ObusC"/>
-            <Image x:Name="SidaC" Source="/image/Sida.png" Stretch="Uniform" HorizontalAlignment="Left" VerticalAlignment="Top" Height="202" Width="132" Margin="801,68,0,0" RenderTransformOrigin="0.504,0.478" MouseLeftButtonDown="Image_MouseLeftButtonDown" Tag="SidaC"/>
-            <Image x:Name="SihaC" Source="/image/siha.png" Stretch="Uniform" HorizontalAlignment="Left" VerticalAlignment="Top" Height="202" Width="131" MouseLeftButtonDown="Image_MouseLeftButtonDown" Tag="SihaC" Canvas.Left="1014" Canvas.Top="51"/>
-            <Image x:Name="UcakC" Source="/image/Ucak.png" Stretch="Uniform" HorizontalAlignment="Left" VerticalAlignment="Top" Height="202" Width="131" MouseLeftButtonDown="Image_MouseLeftButtonDown" Tag="UcakC" Canvas.Left="54" Canvas.Top="47" RenderTransformOrigin="0.43,0.498"/>
-            <Button Canvas.Left="411" Canvas.Top="302"/>
-            <Button Content="Let's Go"  Style="{StaticResource FancyButtonStyle}" Canvas.Left="367" Canvas.Top="289" HorizontalAlignment="Left" VerticalAlignment="Top" Height="34" Width="101" FontFamily="Forte"/>
-            <Button Content="Play"  Style="{StaticResource FancyButtonStyle}" Canvas.Left="707" Canvas.Top="287" Height="32" Width="91" HorizontalAlignment="Left" VerticalAlignment="Top" FontFamily="Forte"/>
-            <ComboBox x:Name="cmb2_Copy1" Width="132" RenderTransformOrigin="0.535,0.562" Height="32" HorizontalAlignment="Left" Canvas.Left="256" Canvas.Top="538" VerticalAlignment="Top" SelectionChanged="cmb2_Copy1_SelectionChanged"   />
-
-        </Canvas>
-
-
         <TextBlock Name="tbHello"
    Text="Player"
    FontSize="60"
-   Margin="7,482,989,0"
+   Margin="506,322,490,0"
    VerticalAlignment="Top"
    RenderTransformOrigin="0.298,-0.8"
    FontFamily="Modern No. 20"
-   Foreground="White"
+   Foreground="Black"
    FontStyle="Italic"  FontWeight="Bold" Height="62"/>
         <Button Content="Let's Go"  Style="{StaticResource FancyButtonStyle}" HorizontalAlignment="Left" VerticalAlignment="Top" Height="34" Width="101" FontFamily="Forte" Margin="372,294,0,0"/>
         <Button Content="Play"  Style="{StaticResource FancyButtonStyle}" Height="32" Width="91" HorizontalAlignment="Left" VerticalAlignment="Top" FontFamily="Forte" Margin="712,292,0,0"/>
         <ComboBox x:Name="cmb2_Copy1" Width="132" RenderTransformOrigin="0.535,0.562" Height="32" HorizontalAlignment="Left" VerticalAlignment="Top" SelectionChanged="cmb2_Copy1_SelectionChanged"   Margin="256,538,0,0"   />
         <TextBlock x:Name="tbHello_Copy"
             FontSize="60"
-            Margin="0,125,928,0"
+            Margin="468,234,460,0"
             VerticalAlignment="Top"
             RenderTransformOrigin="0.298,-0.8"
             FontFamily="Modern No. 20"
-            Foreground="White"
+            Foreground="Black"
             FontStyle="Italic"  FontWeight="Bold" Height="65">
             <Run Language="tr-tr" Text="Computer"/>
         </TextBlock>
         <ComboBox x:Name="cmb2" HorizontalAlignment="Left" Margin="809,546,0,0" VerticalAlignment="Top" Width="132" RenderTransformOrigin="0.535,0.562" Height="32" SelectionChanged="cmb2_SelectionChanged" />
-        <Label Content="Label" HorizontalAlignment="Left" Margin="282,418,0,0" VerticalAlignment="Top" Height="20" Width="49" FontFamily="Times New Roman" FontSize="9"/>
-        <Label Content="Label" HorizontalAlignment="Left" Margin="561,481,0,0" VerticalAlignment="Top" Height="20" Width="49" FontFamily="Times New Roman" FontSize="9"/>
-        <Label Content="Label" HorizontalAlignment="Left" Margin="310,476,0,0" VerticalAlignment="Top" Height="20" Width="49" FontFamily="Times New Roman" FontSize="9"/>
-        <Label Content="Label" HorizontalAlignment="Left" Margin="835,421,0,0" VerticalAlignment="Top" Height="20" Width="49" FontFamily="Segoe UI Black" FontSize="9"/>
-        <Label Content="Label" HorizontalAlignment="Left" Margin="865,480,0,0" VerticalAlignment="Top" Height="20" Width="49" FontFamily="Times New Roman" FontSize="9" RenderTransformOrigin="4.996,1.304"/>
-        <Label Content="Label" HorizontalAlignment="Left" Margin="592,539,0,0" VerticalAlignment="Top" Height="20" Width="49" FontFamily="Times New Roman" FontSize="9"/>
-        <Label Content="Label" HorizontalAlignment="Left" Margin="275,156,0,0" VerticalAlignment="Top" Height="20" Width="49" FontFamily="Times New Roman" FontSize="9"/>
-        <Label Content="Label" HorizontalAlignment="Left" Margin="298,173,0,0" VerticalAlignment="Top" Height="20" Width="49" FontFamily="Times New Roman" FontSize="9"/>
-        <Label Content="Label" HorizontalAlignment="Left" Margin="307,214,0,0" VerticalAlignment="Top" Height="20" Width="49" FontFamily="Times New Roman" FontSize="9"/>
-        <Label Content="Label" HorizontalAlignment="Left" Margin="564,111,0,0" VerticalAlignment="Top" Height="20" Width="49" FontFamily="Times New Roman" FontSize="9"/>
-        <Label Content="Label" HorizontalAlignment="Left" Margin="591,169,0,0" VerticalAlignment="Top" Height="20" Width="49" FontFamily="Times New Roman" FontSize="9" RenderTransformOrigin="0.398,-0.369"/>
-        <Label Content="Label" HorizontalAlignment="Left" Margin="827,150,0,0" VerticalAlignment="Top" Height="20" Width="49" FontFamily="Times New Roman" FontSize="9" RenderTransformOrigin="0.401,0.443"/>
-        <Label Content="Label" HorizontalAlignment="Left" Margin="864,207,0,0" VerticalAlignment="Top" Height="20" Width="49" FontFamily="Times New Roman" FontSize="9"/>
-        <Label Content="Label" HorizontalAlignment="Left" Margin="851,166,0,0" VerticalAlignment="Top" Height="20" Width="49" FontFamily="Times New Roman" FontSize="9" RenderTransformOrigin="0.5,0.5">
-            <Label.RenderTransform>
-                <TransformGroup>
-                    <ScaleTransform/>
-                    <SkewTransform/>
-                    <RotateTransform Angle="0.838"/>
-                    <TranslateTransform/>
-                </TransformGroup>
-            </Label.RenderTransform>
-        </Label>
-        <Label Content="Label" HorizontalAlignment="Left" Margin="583,129,0,0" VerticalAlignment="Top" Height="20" Width="49" FontFamily="Times New Roman" FontSize="9"/>
-        <Label Content="Label" HorizontalAlignment="Left" Margin="582,497,0,0" VerticalAlignment="Top" Height="20" Width="49" FontFamily="Times New Roman" FontSize="9"/>
-        <Label Content="Label" HorizontalAlignment="Left" Margin="300,434,0,0" VerticalAlignment="Top" Height="20" Width="49" FontFamily="Times New Roman" FontSize="9"/>
-        <Label Content="Label" HorizontalAlignment="Left" Margin="859,439,0,0" VerticalAlignment="Top" Height="20" Width="49" FontFamily="Times New Roman" FontSize="9"/>
         <ComboBox  x:Name="cmb2_Copy" HorizontalAlignment="Left" Margin="537,600,0,0" VerticalAlignment="Top" Width="132" RenderTransformOrigin="0.535,0.562" Height="32" SelectionChanged="cmb2_Copy_SelectionChanged"  />
-        <ComboBox HorizontalAlignment="Left" Height="0" Margin="461,168,0,0" VerticalAlignment="Top" Width="120"/>
 
 
 
@@ -210,6 +161,3 @@
     </Window.Background>
 
 </Window>
-    
-    
-
