@@ -6,30 +6,31 @@ using System.Threading.Tasks;
 
 namespace TestProject
 {
-    internal class Firakteyn: Deniz_Araclari
+    internal class Ucak : Hava_Araclari
     {
-        public override string AltSinif { get; set; } = "Firakteyn";
+        public override string AltSinif { get; set; } = "Ucak";
+        public override int KaraVurusAvantaji { get; set; } = 10;
 
-        public override int HavaVurusAvantaji { get; set; } = 5;
-        
-        public override int Vurus { get;  } = 10;
-        public int ID;
+        public int ID { get; private set; }
+        public override int Vurus { get; } = 10;
+
 
         public override string ToString()
         {
             return $"{AltSinif}";
         }
 
-        public Firakteyn(int seviyePuani, string sinif,int dayaniklilik,int Id, int Secilme_sayisi,string altSinif) : base(seviyePuani, sinif)
+
+        public Ucak(int seviyePuani, string sinif,int dayaniklilik,int Id,int Secilme_sayisi,string altSinif) : base(seviyePuani, sinif)
         {
-            Id++;
             Dayaniklilik = dayaniklilik;
-            ID = Id;
+            ID = Id+1;
             AltSinif = altSinif;    
-           
+                
         }
 
         
+
         public override void DurumGuncelle()
         {
 
@@ -40,5 +41,6 @@ namespace TestProject
         {
             base.KartPuaniGoster();
         }
+
     }
 }

@@ -52,7 +52,7 @@ namespace TestProject {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/prolabCardGame;component/newgame.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/TestProject;component/newgame.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\NewGame.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

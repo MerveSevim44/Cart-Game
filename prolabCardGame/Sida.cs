@@ -6,33 +6,31 @@ using System.Threading.Tasks;
 
 namespace TestProject
 {
-    internal class Firakteyn: Deniz_Araclari
+    internal class Sida:Deniz_Araclari
     {
-        public override string AltSinif { get; set; } = "Firakteyn";
+        public override string AltSinif { get; set; } = "Sida";
+        public override int HavaVurusAvantaji { get; set; } = 10;
 
-        public override int HavaVurusAvantaji { get; set; } = 5;
-        
-        public override int Vurus { get;  } = 10;
+        public int KaraVurusAvantaji { get; set; } = 10;
+       
+        public override int Vurus { get; } = 10;
         public int ID;
 
         public override string ToString()
         {
             return $"{AltSinif}";
         }
-
-        public Firakteyn(int seviyePuani, string sinif,int dayaniklilik,int Id, int Secilme_sayisi,string altSinif) : base(seviyePuani, sinif)
+        public Sida(int seviyePuani, string sinif,int dayaniklilik,int Id, string altSinif, int Secilme_sayisi) : base(seviyePuani, sinif)
         {
             Id++;
             Dayaniklilik = dayaniklilik;
             ID = Id;
-            AltSinif = altSinif;    
-           
+            AltSinif = altSinif;
         }
 
-        
         public override void DurumGuncelle()
         {
-
+           
         }
 
 
