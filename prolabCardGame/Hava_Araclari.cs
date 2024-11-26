@@ -18,7 +18,10 @@ namespace TestProject
       
 
         public abstract int KaraVurusAvantaji { get; set; }
-        public abstract string AltSinif { get; set; }
+        public override string AltSinif { get; set; }
+        public override int ID { get; set; }
+        
+
 
 
         public override string ToString()

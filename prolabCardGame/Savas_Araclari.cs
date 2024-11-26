@@ -12,6 +12,9 @@ namespace TestProject
         public abstract int Dayaniklilik { get; set; }
         public abstract int Vurus { get; }
         public abstract string Sinif { get; set; }
+        public abstract int ID {  get; set; }
+        
+        public abstract string AltSinif { get; set; }   
 
         public Savas_Araclari(int seviyePuani)
         {

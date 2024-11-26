@@ -13,20 +13,19 @@ namespace TestProject
         public override int HavaVurusAvantaji { get; set; } = 5;
         
         public override int Vurus { get;  } = 10;
-        public int ID;
+        public override int ID { get; set; } = 020200;
+        public static int sayac { get; set; } = 0;
+        public override int Dayaniklilik { get; set; } = 25;
 
         public override string ToString()
         {
             return $"{AltSinif}";
         }
 
-        public Firakteyn(int seviyePuani, string sinif,int dayaniklilik,int Id, int Secilme_sayisi,string altSinif) : base(seviyePuani, sinif)
+        public Firakteyn(int seviyePuani, string sinif,int dayaniklilik, int Secilme_sayisi,string altSinif) : base(seviyePuani, sinif)
         {
-            Id++;
-            Dayaniklilik = dayaniklilik;
-            ID = Id;
-            AltSinif = altSinif;    
-           
+            ID += ++sayac;
+            AltSinif = altSinif;
         }
 
         

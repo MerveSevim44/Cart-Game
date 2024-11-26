@@ -11,8 +11,10 @@ namespace TestProject
         public override string AltSinif { get; set; } = "Ucak";
         public override int KaraVurusAvantaji { get; set; } = 10;
 
-        public int ID { get; private set; }
+        public override int ID { get; set; } = 010100;
+        public static int sayac { get; set; } = 0;
         public override int Vurus { get; } = 10;
+        public override int Dayaniklilik { get ; set ; } = 20;
 
 
         public override string ToString()
@@ -21,10 +23,9 @@ namespace TestProject
         }
 
 
-        public Ucak(int seviyePuani, string sinif,int dayaniklilik,int Id,int Secilme_sayisi,string altSinif) : base(seviyePuani, sinif)
+        public Ucak(int seviyePuani, string sinif,int dayaniklilik,int Secilme_sayisi,string altSinif) : base(seviyePuani, sinif)
         {
-            Dayaniklilik = dayaniklilik;
-            ID = Id+1;
+            ID += ++sayac;
             AltSinif = altSinif;    
                 
         }

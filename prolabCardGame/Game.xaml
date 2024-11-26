@@ -138,7 +138,6 @@
    FontStyle="Italic"  FontWeight="Bold" Height="62"/>
         <Button Content="Let's Go"  Style="{StaticResource FancyButtonStyle}" HorizontalAlignment="Left" VerticalAlignment="Top" Height="34" Width="101" FontFamily="Forte" Margin="372,294,0,0"/>
         <Button Content="Play"  Style="{StaticResource FancyButtonStyle}" Height="32" Width="91" HorizontalAlignment="Left" VerticalAlignment="Top" FontFamily="Forte" Margin="712,292,0,0"/>
-        <ComboBox x:Name="cmb2_Copy1" Width="132" RenderTransformOrigin="0.535,0.562" Height="32" HorizontalAlignment="Left" VerticalAlignment="Top" SelectionChanged="cmb2_Copy1_SelectionChanged"   Margin="256,538,0,0"   />
         <TextBlock x:Name="tbHello_Copy"
             FontSize="60"
             Margin="468,234,460,0"
@@ -149,8 +148,6 @@
             FontStyle="Italic"  FontWeight="Bold" Height="65">
             <Run Language="tr-tr" Text="Computer"/>
         </TextBlock>
-        <ComboBox x:Name="cmb2" HorizontalAlignment="Left" Margin="809,546,0,0" VerticalAlignment="Top" Width="132" RenderTransformOrigin="0.535,0.562" Height="32" SelectionChanged="cmb2_SelectionChanged" />
-        <ComboBox  x:Name="cmb2_Copy" HorizontalAlignment="Left" Margin="537,600,0,0" VerticalAlignment="Top" Width="132" RenderTransformOrigin="0.535,0.562" Height="32" SelectionChanged="cmb2_Copy_SelectionChanged"  />
 
 
 

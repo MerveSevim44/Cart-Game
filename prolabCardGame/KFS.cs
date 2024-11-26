@@ -14,13 +14,12 @@ namespace TestProject
        
         public int HavaVurusAvantaji { get; set; } = 20;
         public override int Vurus { get;} = 10;
-        public int ID;
+        public override int ID { get; set; } = 030200;
+        public static int sayac { get; set; } = 0;
 
-        public KFS(int seviyePuani, string sinif,int dayaniklilik,int Id, string altSinif, int Secilme_sayisi) : base(seviyePuani, sinif)
+        public KFS(int seviyePuani, string sinif,int dayaniklilik, string altSinif, int Secilme_sayisi) : base(seviyePuani, sinif)
         {
-            Id++;
-            Dayaniklilik = dayaniklilik;
-            ID = Id;
+            ID += ++sayac;
             AltSinif = altSinif;
         }
 

@@ -10,7 +10,7 @@ namespace TestProject
     {
 
         public int Seviye_Puani { get; set; } = 0;
-        public override int Dayaniklilik { get; set; }
+        public override int Dayaniklilik { get; set; } 
 
         public override int Vurus { get;  }
 
@@ -20,7 +20,7 @@ namespace TestProject
 
         public abstract int HavaVurusAvantaji { get; set; }  
 
-        public abstract string AltSinif { get; set; }
+        public override string AltSinif { get; set; }
 
 
         public Deniz_Araclari(int seviyePuan, string sinif) : base(seviyePuan)

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TestProject
 {
-    internal class Sida:Deniz_Araclari
+    internal class Sida : Deniz_Araclari
     {
         public override string AltSinif { get; set; } = "Sida";
         public override int HavaVurusAvantaji { get; set; } = 10;
@@ -14,17 +14,17 @@ namespace TestProject
         public int KaraVurusAvantaji { get; set; } = 10;
        
         public override int Vurus { get; } = 10;
-        public int ID;
+        public override int ID { get; set; } = 020100;
+        public static int sayac { get; set; } = 0;
+        public override int Dayaniklilik { get; set; } = 15;
 
         public override string ToString()
         {
             return $"{AltSinif}";
         }
-        public Sida(int seviyePuani, string sinif,int dayaniklilik,int Id, string altSinif, int Secilme_sayisi) : base(seviyePuani, sinif)
+        public Sida(int seviyePuani, string sinif,int dayaniklilik, string altSinif, int Secilme_sayisi) : base(seviyePuani, sinif)
         {
-            Id++;
-            Dayaniklilik = dayaniklilik;
-            ID = Id;
+            ID += ++sayac;
             AltSinif = altSinif;
         }
 

@@ -13,9 +13,12 @@ namespace TestProject
         public override string Sinif { get; set; } = "Kara";
 
         // Alt sınıfların doldurması gereken özellikler
-        public abstract string AltSinif { get; set; }
+        public override string AltSinif { get; set; }
         public abstract int DenizVurusAvantaji { get; set; }
-        
+        public override int ID { get; set; }
+       
+
+
         public Kara_Araclari(int seviyePuani, string sinif) : base(seviyePuani)
         {
             

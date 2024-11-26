@@ -16,22 +16,28 @@ using System.Windows.Shapes;
 
 namespace TestProject
 {
-   
+
     public partial class Game : Window
     {
+        // Define the list of selected canvases
+        List<Canvas> SecilmisKartlar = new List<Canvas>();
+        List<Savas_Araclari> Kartlar;
         public Game()
         {
             InitializeComponent();
             Oyuncu player = new Oyuncu();
-            List<Savas_Araclari> Kartlar = player.KartSec();
+            Kartlar = player.KartSec();
 
-
-            foreach (var kart in Kartlar)
+            addCanvases(Kartlar);
+        }
+        private void addCanvases(List<Savas_Araclari> Kartlar)
+        {
+            for (int i = MainGrid.Children.Count - 1; i >= 0; i--)
             {
-                cmb2.Items.Add(kart.ToString());
-                cmb2_Copy1.Items.Add(kart.ToString());
-                cmb2_Copy.Items.Add(kart.ToString());
-
+                if (MainGrid.Children[i] is Canvas canvas)
+                {
+                    MainGrid.Children.RemoveAt(i);  // Remove the canvas
+                }
             }
 
             int cardSpacing = 150; // Space between each card
@@ -39,42 +45,79 @@ namespace TestProject
 
             // Calculate the starting X position to center the cards on the screen
             int centerX = 1024 / 2; // Assuming screen width is 1024
+            int startX = centerX - totalWidth / 2 + 60;
 
-            // Calculate the offset from the center for the first card
-            int startX = centerX - totalWidth / 2+60;
-
-            for (int i=0;i<Kartlar.Count;i++){ 
+            for (int i = 0; i < Kartlar.Count; i++)
+            {
+                Canvas canvas = CreateCanvas(Kartlar[i], startX + i * cardSpacing);
+                MainGrid.Children.Add(canvas);
+            }
+        }
+        private Canvas CreateCanvas(Savas_Araclari card, int xPosition)
+        {
             // Create Canvas
             Canvas canvas = new Canvas
             {
-                 Margin = new Thickness(startX + i * cardSpacing, 454, 0, 20) // Y position fixed at 454, and 0 for right and bottom margin
+                Margin = new Thickness(xPosition, 454, 0, 20), // Position the canvas
+                Tag = card // Store the card object in the Tag property
             };
 
-                // Create Image
-                Image cardImage = new Image
+            // Create Image
+            Image cardImage = new Image
             {
-                Source = new BitmapImage(new Uri("/image/"+ Kartlar[i].ToString() + ".png", UriKind.Relative)),
+                Source = new BitmapImage(new Uri("/image/" + card.ToString() + ".png", UriKind.Relative)),
                 Stretch = Stretch.Uniform,
                 Height = 202,
                 Width = 131,
-                Tag = Kartlar[i].ToString() + "P"
+                Tag = card.ToString() + "P" // Optional: Tag the image too
             };
             Canvas.SetLeft(cardImage, 26);
             Canvas.SetTop(cardImage, 20);
-            cardImage.MouseLeftButtonDown += Image_MouseLeftButtonDown;
             canvas.Children.Add(cardImage);
 
             // Create Labels
-            Label label1 = CreateLabel("Label", 49, 20, 80, 117, VerticalAlignment.Top);
+            Label label1 = CreateLabel(card.Dayaniklilik + "", 49, 20, 85, 122, VerticalAlignment.Top);
             canvas.Children.Add(label1);
 
-            Label label2 = CreateLabel("Label", 49, 20, 55, 100, VerticalAlignment.Top);
+            Label label2 = CreateLabel(card.ID + "", 49, 20, 60, 105, VerticalAlignment.Top);
             canvas.Children.Add(label2);
 
-            Label label3 = CreateLabel("Label", 49, 20, 89, 159, VerticalAlignment.Center);
+            Label label3 = CreateLabel(card.Seviye_Puani + "", 49, 20, 90, 165, VerticalAlignment.Center);
             canvas.Children.Add(label3);
-            MainGrid.Children.Add(canvas);
+
+            // Attach the event handler to the Canvas
+            canvas.MouseLeftButtonDown += Canvas_MouseLeftButtonDown;
+
+            return canvas;
+        }
+
+
+        private void Canvas_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            var canvas = sender as Canvas;
+
+
+            if (SecilmisKartlar.Count!=3 && canvas != null && !SecilmisKartlar.Contains(canvas))
+            {
+                SecilmisKartlar.Add(canvas); // Add the canvas to the list
             }
+            else if(SecilmisKartlar.Contains(canvas))
+                    SecilmisKartlar.Remove(canvas);
+
+            
+
+
+
+             // Generate a list of all IDs from the selected cards
+             var selectedCardIDs = SecilmisKartlar
+                .Select(c => (c.Tag as Savas_Araclari)?.ID) // Extract the ID from the Tag property
+                .Where(id => id != null) // Ensure ID is not null
+                .ToList();
+
+            // Display all selected IDs in a MessageBox
+            MessageBox.Show("Seçilmiş Kartların ID'leri:\n" + string.Join(", ", selectedCardIDs));
+            
+
         }
 
 
@@ -95,42 +138,6 @@ namespace TestProject
             return label;
         }
 
-        private void Image_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            var image = sender as System.Windows.Controls.Image;
 
-
-            // Tag özelliği ile hangi resme tıklandığını belirleyip, işlemi ayırt etme
-            switch (image?.Tag)
-            {
-                case "KFSP":
-                    MessageBox.Show($"KFSP resme tıklandı!  ");
-                    break;
-                case "FirkateynP":
-                    MessageBox.Show("FirkateynP resme tıklandı!");
-                    break;
-                case "UcakP":
-                    MessageBox.Show("UcakP resme tıklandı!");
-                    break;
-                default:
-                    MessageBox.Show("Bilinmeyen bir resme tıklandı!");
-                    break;
-            }
-        }
-
-        private void cmb2_Copy1_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
-        }
-
-        private void cmb2_Copy_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
-        }
-
-        private void cmb2_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
-        }
     }
 }

@@ -43,30 +43,29 @@ namespace TestProject
 
         public virtual List<Savas_Araclari> KartSec()
         {
-            List<Savas_Araclari> KartListesi = new List<Savas_Araclari>()
-            {
-            };
+            List<Savas_Araclari> KartListesi = new List<Savas_Araclari>(){};
 
             string[ ] cardTypes = { "Hava", "Kara", "Deniz" };
 
 
 
             Random rand = new Random();
-            for (int i = 0; i < 8; i++)
+            for (int i = 0; i < 5; i++)
             {
 
                 string cardType = cardTypes[rand.Next(cardTypes.Length)];
 
                 switch (cardType)
                 {
+
                     case "Hava":
-                        KartListesi.Add(new Ucak(0, "Hava", 20, 1,0, "Ucak"));
+                        KartListesi.Add(new Ucak(0, "Hava", 20,0, "Ucak"));
                         break;
                     case "Kara":
-                        KartListesi.Add(new Obus(0, "Kara", 20, 1,0, "Obus"));
+                        KartListesi.Add(new Obus(0, "Kara", 20,0, "Obus"));
                         break;
                     case "Deniz":
-                        KartListesi.Add(new Firakteyn(0, "Deniz", 20, 1,0, "Firkateyn"));
+                        KartListesi.Add(new Firakteyn(0, "Deniz", 20,0, "Firkateyn"));
                         break;
                 }
             }
