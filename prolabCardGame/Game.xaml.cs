@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
@@ -23,24 +24,64 @@ namespace TestProject
         // Define the list of selected canvases
         List<Canvas> SecilmisKartlar = new List<Canvas>();
         List<Savas_Araclari> Kartlar;
+        List<Savas_Araclari> KartlarComputer;
 
 
         public Game()
         {
             InitializeComponent();
-            MainWindow main = new MainWindow();
-            string Name = "Oyuncu";
-            int Id = 10;
+            
 
-            if (Kartlar == null )
-            {
-                Oyuncu player = new Oyuncu(Id, Name, 0);
-                Kartlar = player.KartSec();
-            }
+            Oyuncu player = new Oyuncu(10, "Oyuncu", 0);
+            Kartlar = player.KartSec();
+            
+            Oyuncu computer = new Oyuncu();
+            KartlarComputer = computer.KartSec();
+            
 
             addCanvases(Kartlar);
-
+            ShowCardsComputer(KartlarComputer);
         }
+
+
+        private void ShowCardsComputer(List<Savas_Araclari> card)
+        {
+            int cardSpacing = 300; // Space between each card
+            int cardWidth = 131;   // Width of each card
+            int totalWidth = (card.Count - 1) * cardSpacing + cardWidth; // Total width of all cards including spacing
+
+            // Screen dimensions - dynamically get the width and height of MainGrid
+            double screenWidth = MainGrid.ActualWidth; // Width of the MainGrid
+            double screenHeight = MainGrid.ActualHeight; // Height of the MainGrid
+
+            // Center the cards horizontally
+            double centerX = screenWidth / 2;
+            double startX = centerX - totalWidth / 2 + 60; // Calculate starting X position for centering
+
+            // Center the cards vertically (optional)
+            double centerY = screenHeight / 2;
+            double cardYPosition = centerY - 450; // Adjust -100 if needed for aesthetics
+
+            for (int i = 0; i < card.Count; i++)
+            {
+                Image cardImage = new Image
+                {
+                    Margin = new Thickness(startX + i * cardSpacing, cardYPosition, 0, 0),
+                    Source = new BitmapImage(new Uri("/image/backSide.png", UriKind.Relative)),
+                    Stretch = Stretch.Uniform,
+                    Height = 202,
+                    Width = cardWidth,
+                    Tag = card.ToString() + "C" // Optional: Tag the image for identification
+                };
+
+                // Add the card image to MainGrid
+                MainGrid.Children.Add(cardImage);
+            }
+        }
+
+
+
+
 
 
         private void addCanvases(List<Savas_Araclari> Kartlar)
@@ -60,6 +101,7 @@ namespace TestProject
             int centerX = 1024 / 2; // Assuming screen width is 1024
             int startX = centerX - totalWidth / 2 + 60;
 
+
             for (int i = 0; i < Kartlar.Count; i++)
             {
                 Canvas canvas = CreateCanvas(Kartlar[i], startX + i * cardSpacing);
@@ -71,7 +113,7 @@ namespace TestProject
             // Create Canvas
             Canvas canvas = new Canvas
             {
-                Margin = new Thickness(xPosition, 454, 0, 20), // Position the canvas
+                Margin = new Thickness(xPosition,450, 0, 20), // Position the canvas
                 Tag = card // Store the card object in the Tag property
             };
 
@@ -151,8 +193,6 @@ namespace TestProject
             }
         }
 
-
-
         private void Canvas_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             var canvas = sender as Canvas;
@@ -163,19 +203,44 @@ namespace TestProject
                 if (!SecilmisKartlar.Contains(canvas) && SecilmisKartlar.Count < 3)
                 {
                     SecilmisKartlar.Add(canvas);
+
+                    // Apply "selected" effect (red outline)
+                    ApplySelectedEffect(canvas);
                 }
                 else if (SecilmisKartlar.Contains(canvas))
                 {
-                    MessageBox.Show("Already you have chosen this card before!");
-                    SecilmisKartlar.Remove(canvas);
-                }
 
-                // Check if 3 cards have been selected
-                if (SecilmisKartlar.Count == 3)
+                    SecilmisKartlar.Remove(canvas);
+
+                    // Remove "selected" effect (red outline)
+                    RemoveSelectedEffect(canvas);
+                }
+                else if (SecilmisKartlar.Count == 3)
                 {
-                    RemoveUnselectedCards(); // Remove other cards
+                    MessageBox.Show("You can't select more than 3 cards!");
                 }
             }
+        }
+
+        private void ApplySelectedEffect(Canvas canvas)
+        {
+            // Create a DropShadowEffect with a red shadow
+            var redOutlineEffect = new DropShadowEffect
+            {
+                Color = Colors.Red,
+                ShadowDepth = 0, // Center the shadow around the object
+                BlurRadius = 10, // Adjust the size of the outline
+                Opacity = 1 // Fully opaque
+            };
+
+            // Apply the effect to the Canvas
+            canvas.Effect = redOutlineEffect;
+        }
+
+        private void RemoveSelectedEffect(Canvas canvas)
+        {
+            // Remove the effect by setting it to null
+            canvas.Effect = null;
         }
 
 
@@ -237,9 +302,10 @@ namespace TestProject
                 return; 
             }
 
+
             else
             {
-
+                RemoveUnselectedCards(); // Remove other cards
             }
         }
     }
