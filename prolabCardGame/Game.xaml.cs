@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -11,6 +11,7 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Effects;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
@@ -22,14 +23,26 @@ namespace TestProject
         // Define the list of selected canvases
         List<Canvas> SecilmisKartlar = new List<Canvas>();
         List<Savas_Araclari> Kartlar;
+
+
         public Game()
         {
             InitializeComponent();
-            Oyuncu player = new Oyuncu();
-            Kartlar = player.KartSec();
+            MainWindow main = new MainWindow();
+            string Name = "Oyuncu";
+            int Id = 10;
+
+            if (Kartlar == null )
+            {
+                Oyuncu player = new Oyuncu(Id, Name, 0);
+                Kartlar = player.KartSec();
+            }
 
             addCanvases(Kartlar);
+
         }
+
+
         private void addCanvases(List<Savas_Araclari> Kartlar)
         {
             for (int i = MainGrid.Children.Count - 1; i >= 0; i--)
@@ -85,40 +98,117 @@ namespace TestProject
             Label label3 = CreateLabel(card.Seviye_Puani + "", 49, 20, 90, 165, VerticalAlignment.Center);
             canvas.Children.Add(label3);
 
+
+            // Attach event handlers for hover effects
+            canvas.MouseEnter += Canvas_MouseEnter;
+            canvas.MouseLeave += Canvas_MouseLeave;
+
+
             // Attach the event handler to the Canvas
             canvas.MouseLeftButtonDown += Canvas_MouseLeftButtonDown;
 
             return canvas;
         }
 
+        private Canvas placeCanvas(Canvas canvas, int xPosition)
+        {
+            canvas.Margin = new Thickness(xPosition, 454, 0, 20);
+            // Create Canvas
+      
+            // Attach event handlers for hover effects
+            canvas.MouseEnter += Canvas_MouseEnter;
+            canvas.MouseLeave += Canvas_MouseLeave;
+
+            return canvas;
+        }
+        private void Canvas_MouseEnter(object sender, MouseEventArgs e)
+        {
+            if (sender is Canvas canvas)
+            {
+                // Apply hover effect: Add a yellow glow
+                canvas.Effect = new DropShadowEffect
+                {
+                    Color = Colors.FloralWhite, // Glow color
+                    BlurRadius = 10,       // Intensity of the glow
+                    ShadowDepth = 0        // No shadow offset
+                };
+
+                // Optionally scale up the canvas slightly
+                canvas.RenderTransform = new ScaleTransform(1.0, 1.0);
+                canvas.RenderTransformOrigin = new Point(0.5, 0.5);
+            }
+        }
+
+        private void Canvas_MouseLeave(object sender, MouseEventArgs e)
+        {
+            if (sender is Canvas canvas)
+            {
+                // Remove hover effect: Reset the glow
+                canvas.Effect = null;
+
+                // Reset the scale
+                canvas.RenderTransform = null;
+            }
+        }
+
+
 
         private void Canvas_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             var canvas = sender as Canvas;
 
-
-            if (SecilmisKartlar.Count!=3 && canvas != null && !SecilmisKartlar.Contains(canvas))
+            if (canvas != null)
             {
-                SecilmisKartlar.Add(canvas); // Add the canvas to the list
-            }
-            else if(SecilmisKartlar.Contains(canvas))
+                // Add or remove the selected canvas from the list
+                if (!SecilmisKartlar.Contains(canvas) && SecilmisKartlar.Count < 3)
+                {
+                    SecilmisKartlar.Add(canvas);
+                }
+                else if (SecilmisKartlar.Contains(canvas))
+                {
+                    MessageBox.Show("Already you have chosen this card before!");
                     SecilmisKartlar.Remove(canvas);
+                }
 
-            
-
-
-
-             // Generate a list of all IDs from the selected cards
-             var selectedCardIDs = SecilmisKartlar
-                .Select(c => (c.Tag as Savas_Araclari)?.ID) // Extract the ID from the Tag property
-                .Where(id => id != null) // Ensure ID is not null
-                .ToList();
-
-            // Display all selected IDs in a MessageBox
-            MessageBox.Show("Seçilmiş Kartların ID'leri:\n" + string.Join(", ", selectedCardIDs));
-            
-
+                // Check if 3 cards have been selected
+                if (SecilmisKartlar.Count == 3)
+                {
+                    RemoveUnselectedCards(); // Remove other cards
+                }
+            }
         }
+
+
+
+
+        private void RemoveUnselectedCards()
+        {
+            for (int i = MainGrid.Children.Count - 1; i >= 0; i--)
+            {
+                if (MainGrid.Children[i] is Canvas canvas)
+                {
+                    MainGrid.Children.RemoveAt(i);  // Remove the canvas
+                }
+            }
+
+
+            int cardSpacing = 150; // Space between each card
+            int totalWidth = SecilmisKartlar.Count * cardSpacing; // Total width without considering the card width
+
+            // Calculate the starting X position to center the cards on the screen
+            int centerX = 1024 / 2; // Assuming screen width is 1024
+            int startX = centerX - totalWidth / 2 + 60;
+
+            for (int i = 0; i < SecilmisKartlar.Count; i++)
+            {
+                Canvas canvas = placeCanvas(SecilmisKartlar[i], startX + i * cardSpacing);
+                MainGrid.Children.Add(canvas);
+            }
+
+
+            MessageBox.Show("3 Kart seçildi! Diğer kartlar silindi.");
+        }
+
 
 
         private Label CreateLabel(string content, double width, double height, double left, double top, VerticalAlignment verticalAlignment)
@@ -138,6 +228,19 @@ namespace TestProject
             return label;
         }
 
+       
+        private void Play_Click(object sender, RoutedEventArgs e)
+        {
+            if(SecilmisKartlar.Count<3)
+            {
+                MessageBox.Show("Please choose a choise ! ", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return; 
+            }
 
+            else
+            {
+
+            }
+        }
     }
 }
