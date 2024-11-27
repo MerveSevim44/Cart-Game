@@ -23,6 +23,9 @@ namespace TestProject
     {
         public MainWindow()
         {
+            Game game = new Game();
+            game.Show();
+            this.Close();
             InitializeComponent();
            
         }

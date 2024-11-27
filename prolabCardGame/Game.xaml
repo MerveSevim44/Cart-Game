@@ -137,7 +137,7 @@
    Foreground="Black"
    FontStyle="Italic"  FontWeight="Bold" Height="62"/>
         <Button Content="Let's Go"  Style="{StaticResource FancyButtonStyle}" HorizontalAlignment="Left" VerticalAlignment="Top" Height="34" Width="101" FontFamily="Forte" Margin="372,294,0,0"/>
-        <Button Content="Play"  Style="{StaticResource FancyButtonStyle}" Height="32" Width="91" HorizontalAlignment="Left" VerticalAlignment="Top" FontFamily="Forte" Margin="712,292,0,0"/>
+        <Button Content="Play"  Style="{StaticResource FancyButtonStyle}" Height="32" Width="91" HorizontalAlignment="Left" VerticalAlignment="Top" FontFamily="Forte" Margin="712,292,0,0" Click="Play_Click"/>
         <TextBlock x:Name="tbHello_Copy"
             FontSize="60"
             Margin="468,234,460,0"
@@ -154,7 +154,7 @@
     </Grid>
 
     <Window.Background>
-        <ImageBrush ImageSource="image/newBack.jpg" />
+        <ImageBrush ImageSource="image/background.jpg" />
     </Window.Background>
 
 </Window>

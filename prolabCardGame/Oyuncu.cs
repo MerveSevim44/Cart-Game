@@ -50,7 +50,7 @@ namespace TestProject
 
 
             Random rand = new Random();
-            for (int i = 0; i < 5; i++)
+            for (int i = 0; i < 6; i++)
             {
 
                 string cardType = cardTypes[rand.Next(cardTypes.Length)];

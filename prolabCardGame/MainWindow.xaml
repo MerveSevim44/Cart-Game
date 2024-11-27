@@ -80,7 +80,7 @@
 
     <Window.Background>
         <ImageBrush 
-            ImageSource="image/newBackground.jpg" />
+            ImageSource="image/loginBackground.jpg" />
     </Window.Background>
 
 

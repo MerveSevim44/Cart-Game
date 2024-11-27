@@ -4,10 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
 namespace TestProject
 {
     internal class Firakteyn: Deniz_Araclari
     {
+
         public override string AltSinif { get; set; } = "Firakteyn";
 
         public override int HavaVurusAvantaji { get; set; } = 5;
@@ -28,7 +30,7 @@ namespace TestProject
             AltSinif = altSinif;
         }
 
-        
+
         public override void DurumGuncelle()
         {
 
@@ -38,6 +40,9 @@ namespace TestProject
         public override void KartPuaniGoster()
         {
             base.KartPuaniGoster();
+
         }
+
     }
+
 }
