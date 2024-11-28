@@ -37,6 +37,8 @@ namespace TestProject
             Oyuncu computer = new Oyuncu();
             KartlarComputer = computer.KartSec();
 
+            
+
             addCanvases(Kartlar, 450 , true); // Show player cards at Y position 450
             addCanvases(KartlarComputer, 10 , false); // Show computer cards at Y position 100
         }
@@ -57,7 +59,7 @@ namespace TestProject
             }
         }
 
-        private Canvas CreateCanvas(Savas_Araclari card, int xPosition, int yPosition,bool show)
+        private Canvas CreateCanvas(Savas_Araclari card, int xPosition, int yPosition, bool show)
         {
             Canvas canvas = new Canvas
             {
@@ -67,7 +69,7 @@ namespace TestProject
 
             Image cardImage = new Image
             {
-                Source = new BitmapImage(new Uri("/image/" + (show ? card.ToString(): "backSide") + ".png", UriKind.Relative)),
+                Source = new BitmapImage(new Uri("/image/" + (show ? card.ToString() : "backSide") + ".png", UriKind.Relative)),
                 Stretch = Stretch.Uniform,
                 Height = 202,
                 Width = 131,
@@ -77,19 +79,29 @@ namespace TestProject
             Canvas.SetTop(cardImage, 20);
             canvas.Children.Add(cardImage);
 
+            // Add labels (with visibility control for computer cards)
             Label label1 = CreateLabel(card.Dayaniklilik + "", 49, 20, 85, 122, VerticalAlignment.Top);
+            label1.Visibility = show ? Visibility.Visible : Visibility.Hidden; // Hide labels for computer
             canvas.Children.Add(label1);
 
             Label label2 = CreateLabel(card.ID + "", 49, 20, 60, 105, VerticalAlignment.Top);
+            label2.Visibility = show ? Visibility.Visible : Visibility.Hidden; // Hide labels for computer
             canvas.Children.Add(label2);
 
             Label label3 = CreateLabel(card.Seviye_Puani + "", 49, 20, 90, 165, VerticalAlignment.Center);
+            label3.Visibility = show ? Visibility.Visible : Visibility.Hidden; // Hide labels for computer
             canvas.Children.Add(label3);
 
-            canvas.MouseLeftButtonDown += (sender, e) => Canvas_MouseLeftButtonDown(sender, e, card);
+            // Attach event handler only for player's cards
+            if (show)
+            {
+                canvas.MouseLeftButtonDown += (sender, e) => Canvas_MouseLeftButtonDown(sender, e, card);
+            }
 
             return canvas;
         }
+
+
 
         private void Canvas_MouseLeftButtonDown(object sender, MouseButtonEventArgs e, Savas_Araclari card)
         {
@@ -100,6 +112,7 @@ namespace TestProject
             }
             else if (playerSelectedCards.Contains(card))
             {
+               
                 playerSelectedCards.Remove(card);
                 RemoveSelectedEffect(sender as Canvas);
             }
@@ -107,6 +120,9 @@ namespace TestProject
             {
                 MessageBox.Show("You can't select more than 3 cards!");
             }
+           
+
+
         }
 
         private void ApplySelectedEffect(Canvas canvas)
@@ -176,7 +192,7 @@ namespace TestProject
 
             for (int i = 0; i < playerSelectedCards.Count; i++)
             {
-                Canvas playerCanvas = CreateCanvas(playerSelectedCards[i], playerStartX + i * playerCardSpacing, playerYPosition , true);
+                Canvas playerCanvas = CreateCanvas(playerSelectedCards[i], playerStartX + i * playerCardSpacing, playerYPosition, true);
                 MainGrid.Children.Add(playerCanvas);
             }
 
@@ -186,10 +202,21 @@ namespace TestProject
 
             for (int i = 0; i < computerSelectedCards.Count; i++)
             {
-                Canvas computerCanvas = CreateCanvas(computerSelectedCards[i], computerStartX + i * computerCardSpacing, computerYPosition , true);
+                Canvas computerCanvas = CreateCanvas(computerSelectedCards[i], computerStartX + i * computerCardSpacing, computerYPosition, true);
+
+                // Make labels visible for computer cards
+                foreach (var child in computerCanvas.Children)
+                {
+                    if (child is Label label)
+                    {
+                        label.Visibility = Visibility.Visible; // Reveal labels after Play button
+                    }
+                }
+
                 MainGrid.Children.Add(computerCanvas);
             }
         }
+
 
         private void Play_Click(object sender, RoutedEventArgs e)
         {
@@ -197,6 +224,8 @@ namespace TestProject
             {
                 MessageBox.Show("Please choose a choice!", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
+
+           
             else
             {
                 randomSelectCopmputerCards();
