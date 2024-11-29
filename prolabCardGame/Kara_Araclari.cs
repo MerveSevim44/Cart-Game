@@ -25,7 +25,7 @@ namespace TestProject
             
         }
 
-        public override void DurumGuncelle()
+        public override void DurumGuncelle(Savas_Araclari otherCard)
         {
             
         }
