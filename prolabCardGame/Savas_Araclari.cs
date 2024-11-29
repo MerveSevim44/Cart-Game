@@ -30,6 +30,6 @@ namespace TestProject
             
         }
 
-        public abstract void DurumGuncelle();
+        public abstract void DurumGuncelle(Savas_Araclari otherCard);
     }
 }
