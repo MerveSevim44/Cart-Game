@@ -16,6 +16,7 @@ using System.Windows.Media.Effects;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace TestProject
 {
@@ -31,6 +32,7 @@ namespace TestProject
         List <Savas_Araclari> newCardComputer = new List<Savas_Araclari>();
         List<Savas_Araclari> newCardPlayer = new List<Savas_Araclari>();
         List<Savas_Araclari> allPossibleCards = new List<Savas_Araclari>();
+        private Dictionary<Savas_Araclari, int> cardSelectionCounts = new Dictionary<Savas_Araclari, int>();
 
         public Game()
         {
@@ -50,9 +52,6 @@ namespace TestProject
             addCanvases(Kartlar, 450, true); // Show player cards at Y position 450
             addCanvases(KartlarComputer, 10, false); // Show computer cards at Y position 10
         }
-
-        
-
 
 
         private void addCanvases(List<Savas_Araclari> Kartlar, int yPosition , bool show)
@@ -121,21 +120,25 @@ namespace TestProject
             {
                 playerSelectedCards.Add(card);
                 ApplySelectedEffect(sender as Canvas);
+
+                //// Update selection count
+                //if (cardSelectionCounts.ContainsKey(card))
+                //{
+                //    cardSelectionCounts[card]++;
+                //}
+                //else
+                //{
+                //    cardSelectionCounts[card] = 1;
+                //}
             }
             else if (playerSelectedCards.Contains(card))
             {
-               
                 playerSelectedCards.Remove(card);
                 RemoveSelectedEffect(sender as Canvas);
             }
-            else if (playerSelectedCards.Count == 3)
-            {
-                MessageBox.Show("You can't select more than 3 cards!");
-            }
-           
-
-
+          
         }
+
 
         private void ApplySelectedEffect(Canvas canvas)
         {
@@ -180,6 +183,7 @@ namespace TestProject
             Random random = new Random();
             List<Savas_Araclari> availableCards = new List<Savas_Araclari>(KartlarComputer);
 
+
             while (computerSelectedCards.Count < 3 && availableCards.Count > 0)
             {
                 int index = random.Next(availableCards.Count);
@@ -190,6 +194,8 @@ namespace TestProject
 
         private void RemoveUnselectedCards()
         {
+            List<Savas_Araclari> allKartlarP =new  List<Savas_Araclari>(Kartlar);
+            List<Savas_Araclari> allKartlarC = new List<Savas_Araclari>(KartlarComputer);
             // Clear the current cards from the grid
             for (int i = MainGrid.Children.Count - 1; i >= 0; i--)
             {
@@ -246,33 +252,79 @@ namespace TestProject
                 Canvas newComputerCanvas = CreateCanvas(newCardComputer.Last(), newCardX, computerYPosition, false);
                 MainGrid.Children.Add(newComputerCanvas);
             }
+
+            Kartlar = new List<Savas_Araclari>(allKartlarP);
+            KartlarComputer = new List<Savas_Araclari>(allKartlarC);
         }
 
+        private DispatcherTimer stepTimer;
+        private int currentStep = 0;
 
-        private void CompareAndUpdateCards()
+
+        private void CompareAndUpdateStep()
         {
-            if (playerSelectedCards.Count == 3 && computerSelectedCards.Count == 3)
+            if (currentStep < 3)
             {
-                for (int i = 0; i < 3; i++)
+                Savas_Araclari playerCard = playerSelectedCards[currentStep];
+                Savas_Araclari computerCard = computerSelectedCards[currentStep];
+
+                // Compare and update cards' durability
+                playerCard.DurumGuncelle(computerCard);
+                computerCard.DurumGuncelle(playerCard);
+
+                // Show results for this step
+                MessageBox.Show($"Step {currentStep + 1}:\n" +
+                    $"Player's card ID {playerCard.ID}, Durability: {playerCard.Dayaniklilik}  \n" +
+                    $"Computer's card ID {computerCard.ID}, Durability: {computerCard.Dayaniklilik}  \n  ");
+
+                // Check and remove eliminated cards
+                if (computerCard.Dayaniklilik <= 0)
                 {
-                    Savas_Araclari playerCard = playerSelectedCards[i];
-                    Savas_Araclari computerCard = computerSelectedCards[i];
-
-                    // Compare the cards and update their durability
-                    playerCard.DurumGuncelle(computerCard);
-                    computerCard.DurumGuncelle(playerCard);
-
-                    if (computerSelectedCards[i].Dayaniklilik ==0)
-                        KartlarComputer.RemoveAt(i);
-
-                    if (playerSelectedCards[i].Dayaniklilik == 0)
-                        Kartlar.RemoveAt(i);
+                    MessageBox.Show($"Player's card ID {playerCard.ID} eliminates Computer's card ID {computerCard.ID} level score: {playerCard.Seviye_Puani} ");
+                    KartlarComputer.Remove(computerCard);
                 }
 
-                // Display updated durability values (for example)
-                DisplayUpdatedDurability();
+                if (playerCard.Dayaniklilik <= 0)
+                {
+                    MessageBox.Show($"Computer's card ID {computerCard.ID} eliminates Player's card ID {playerCard.ID} level score: {computerCard.Seviye_Puani}");
+                    Kartlar.Remove(playerCard);
+                }
+
+                // Move to the next step
+                currentStep++;
             }
         }
+
+
+
+        private void StartStepByStepComparison()
+        {
+            currentStep = 0; // Reset step counter
+
+            stepTimer = new DispatcherTimer
+            {
+                Interval = TimeSpan.FromSeconds(2) // 2 seconds between each step
+            };
+
+            stepTimer.Tick += (s, e) =>
+            {
+                CompareAndUpdateStep();
+
+                // Stop the timer when all steps are completed
+                if (currentStep >= 3)
+                {
+                    stepTimer.Stop();
+                    MessageBox.Show("Comparison complete!");
+                    DisplayUpdatedDurability(); // Show final durability
+                }
+            };
+
+            stepTimer.Start(); // Start the timer
+        }
+
+
+
+
 
         // Example method to display updated durability
         private void DisplayUpdatedDurability()
@@ -331,8 +383,6 @@ namespace TestProject
         }
 
 
-
-
         private void Play_Click(object sender, RoutedEventArgs e)
         {
             if (playerSelectedCards.Count < 3)
@@ -345,14 +395,69 @@ namespace TestProject
                 AddNewCards(); // Add new unique cards
                 RemoveUnselectedCards();
                 // Compare and update the cards
-                CompareAndUpdateCards();
+                StartStepByStepComparison();
 
             }
         }
 
+
+        private void ReshowCards()
+        {
+            // Remove all children except the Play and Let's Go buttons
+            foreach (var child in MainGrid.Children.OfType<UIElement>().ToList())
+            {
+                // Keep Play and Let's Go buttons by checking their names
+                if (child is Button button)
+                {
+                    if (button.Name != "Play" && button.Name != "LetsGo")
+                    {
+                        MainGrid.Children.Remove(child);
+                    }
+                }
+                else
+                {
+                    // Remove other UI elements (e.g., canvases, images) from the grid
+                    MainGrid.Children.Remove(child);
+                }
+            }
+         
+            // Re-show player's remaining cards
+            addCanvases(Kartlar, 450, true);  // Player cards at Y position 450
+
+            // Re-show computer's remaining cards
+            addCanvases(KartlarComputer, 10, false);  // Computer cards at Y position 100
+        }
+
+
+        private int currentRound = 0;
+        private const int totalRounds = 5;
+
         private void LetsGo_Click(object sender, RoutedEventArgs e)
         {
+            // Increment the current round
+            currentRound++;
 
+            // Check if the game is over
+            if (currentRound > totalRounds)
+            {
+                MessageBox.Show("Game Over! The maximum rounds are reached.");
+                return;
+            }
+
+            // Step 2: Re-show the current remaining cards for both the player and the computer
+            ReshowCards();
+
+            // Step 3: Proceed with the next round logic (e.g., Player chooses cards)
+            if (currentRound <= totalRounds)
+            { 
+                // Computer randomly selects cards for the new round
+                randomSelectCopmputerCards();
+
+            }
+
+            // Optionally show round-specific message or visual update
+            MessageBox.Show($"Round {currentRound} complete! Cards have been updated.");
+           
         }
     }
 
