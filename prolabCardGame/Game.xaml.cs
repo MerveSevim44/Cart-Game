@@ -116,19 +116,37 @@ namespace TestProject
                 return;
             }
 
+            // Find the minimum selecTimes in the list
+            int minSelecTimes = Cards.Min(c => c.selecTimes);
+
+            // Allowable threshold for selection
+            int threshold = 0; // Customize this value based on how strict you want the balancing
+
             if (playerSelectedCards.Count < 3 && !playerSelectedCards.Contains(card))
             {
+                // Prevent selecting cards with much higher selecTimes than the minimum
+                if (card.selecTimes > minSelecTimes + threshold)
+                {
+                    log($"You can't select this card. Its selection count ({card.selecTimes}) is too high.", 3);
+                    return;
+                }
+
+                // Add card to the selection and update its state
                 playerSelectedCards.Add(card);
+                card.selecTimes++; // Increment selecTimes
                 ApplySelectedEffect(sender as Canvas, Colors.Green);
             }
             else if (playerSelectedCards.Contains(card))
             {
+                // Remove the card from the selection
                 playerSelectedCards.Remove(card);
+
+                card.selecTimes--; // Increment selecTimes
                 RemoveSelectedEffect(sender as Canvas);
             }
             else
             {
-                log("You can't select more than 3 cards!",3);
+                log("You can't select more than 3 cards!", 3);
             }
         }
 
@@ -181,6 +199,7 @@ namespace TestProject
                 return;
             }
             playButton.IsEnabled = false;
+
             randomSelectComputerCards();
             RemoveUnselectedCards();
             StartStepByStepComparison();
@@ -332,10 +351,27 @@ namespace TestProject
             computerSelectedCards.Clear();
             Random random = new Random();
 
+            // Find the minimum selecTimes in the computer's card pool
+            int minSelecTimes = CardsComputer.Min(c => c.selecTimes);
+
+            // Allowable threshold for selection
+            int threshold = 0; // Adjust this to control balancing
+
             while (computerSelectedCards.Count < 3)
             {
                 int randIndex = random.Next(CardsComputer.Count);
-                computerSelectedCards.Add(CardsComputer[randIndex]);
+                var selectedCard = CardsComputer[randIndex];
+
+                // Check if the card is already selected or exceeds the threshold
+                if (computerSelectedCards.Contains(selectedCard))
+                    continue;
+
+                if (selectedCard.selecTimes > minSelecTimes + threshold)
+                    continue;
+
+                // Add the card to the selection and update its selecTimes
+                computerSelectedCards.Add(selectedCard);
+                selectedCard.selecTimes++;
             }
         }
 

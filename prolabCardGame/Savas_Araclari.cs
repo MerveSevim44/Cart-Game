@@ -9,6 +9,8 @@ namespace TestProject
     internal abstract class Savas_Araclari
     {
         public int Seviye_Puani { get; set; }
+        public int selecTimes { get; set; } = 0;
+
         public abstract int Dayaniklilik { get; set; }
         public abstract int Vurus { get; }
         public abstract string Sinif { get; set; }
