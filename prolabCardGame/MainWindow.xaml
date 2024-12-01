@@ -43,9 +43,9 @@
     </Window.Resources>
 
 
-    <Grid Height="440" VerticalAlignment="Top">
-        <Button Content="Giriş" Style="{StaticResource FancyButtonStyle}" HorizontalAlignment="Left" Margin="342,218,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.298,-0.8" Height="27" Width="108" Click="Button_Click" />
-        <TextBox x:Name="UserNameTextBox" HorizontalAlignment="Left" Margin="387,150,0,0" TextWrapping="Wrap" Text=""   VerticalAlignment="Top" Width="125" RenderTransformOrigin="0.5,0.637" Height="24" FontStyle="Italic" FontWeight="Bold" />
+    <Grid Height="431" VerticalAlignment="Center" HorizontalAlignment="Center" Width="798">
+        <Button Content="Giriş" Style="{StaticResource FancyButtonStyle}" Margin="345,232,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.298,-0.8" Height="28" Click="Button_Click" HorizontalAlignment="Left" Width="108" />
+        <TextBox x:Name="UserNameTextBox" HorizontalAlignment="Left" Margin="403,152,0,0" TextWrapping="Wrap" Text=""   VerticalAlignment="Top" Width="125" RenderTransformOrigin="0.5,0.637" Height="24" FontStyle="Italic" FontWeight="Bold" />
         <Label Content="User Name" HorizontalAlignment="Left" Margin="304,151,0,0" VerticalAlignment="Top" Height="24" Width="81" RenderTransformOrigin="0.386,1.527" FontSize="15" FontFamily="Modern No. 20"  >
             <Label.RenderTransform>
                 <TransformGroup>
@@ -74,7 +74,7 @@
                 </TransformGroup>
             </Label.RenderTransform>
         </Label>
-        <TextBox x:Name="UserIDTextBox" HorizontalAlignment="Left" Margin="387,179,0,0" TextWrapping="Wrap" Text=""   VerticalAlignment="Top" Width="125" RenderTransformOrigin="0.5,0.637" Height="24"  FontStyle="Italic" FontWeight="Bold" />
+        <TextBox x:Name="UserIDTextBox" HorizontalAlignment="Left" Margin="403,182,0,0" TextWrapping="Wrap" Text=""   VerticalAlignment="Top" Width="125" RenderTransformOrigin="0.5,0.637" Height="24"  FontStyle="Italic" FontWeight="Bold" />
 
     </Grid>
 

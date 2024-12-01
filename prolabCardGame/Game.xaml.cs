@@ -8,6 +8,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Effects;
 using System.Windows.Media.Imaging;
+using System.Media;
 using System.IO;
 using System.Diagnostics;
 
@@ -25,7 +26,7 @@ namespace TestProject
 
         List<Savas_Araclari> playerSelectedCards = new List<Savas_Araclari>();
         List<Savas_Araclari> computerSelectedCards = new List<Savas_Araclari>();
-
+        private SoundPlayer ClickSound;
         double sizeFactor = 1.2;
         private int currentStep = 0;
         private int currentRound = 0;
@@ -35,7 +36,7 @@ namespace TestProject
         {
             InitializeComponent();
             Cards = player.KartSec();
-            
+            ClickSound = new SoundPlayer();
             playerName.Text = UserName;
             LetsGo.IsEnabled = false;
             CardsComputer = computer.KartSec();
@@ -45,7 +46,7 @@ namespace TestProject
 
         private void addCanvases(List<Savas_Araclari> cards, int yPosition, bool show)
         {
-            double cardSpacing = 300 * sizeFactor; // Space between each card
+            double cardSpacing = 300 * sizeFactor;
             double totalWidth = cards.Count * cardSpacing;
             int centerX = (int)SystemParameters.PrimaryScreenWidth / 2;
             double startX = centerX - totalWidth / 2 - 600;
@@ -117,32 +118,29 @@ namespace TestProject
                 return;
             }
 
-            // Find the minimum selecTimes in the list
             int minSelecTimes = Cards.Min(c => c.selecTimes);
 
-            // Allowable threshold for selection
-            int threshold = 0; // Customize this value based on how strict you want the balancing
+            int threshold = 0; 
 
             if (playerSelectedCards.Count < 3 && !playerSelectedCards.Contains(card))
             {
-                // Prevent selecting cards with much higher selecTimes than the minimum
+
                 if (card.selecTimes > minSelecTimes + threshold)
                 {
                     log($"You can't select this card. Its selection count ({card.selecTimes}) is too high.", 3);
                     return;
                 }
 
-                // Add card to the selection and update its state
                 playerSelectedCards.Add(card);
-                card.selecTimes++; // Increment selecTimes
+                card.selecTimes++;
                 ApplySelectedEffect(sender as Canvas, Colors.Green);
+                sound("Secme.wav");
             }
             else if (playerSelectedCards.Contains(card))
             {
-                // Remove the card from the selection
                 playerSelectedCards.Remove(card);
 
-                card.selecTimes--; // Increment selecTimes
+                card.selecTimes--;
                 RemoveSelectedEffect(sender as Canvas);
             }
             else
@@ -203,8 +201,10 @@ namespace TestProject
 
             randomSelectComputerCards();
             RemoveUnselectedCards();
+            sound("Play.wav");
             StartStepByStepComparison();
             LetsGo.IsEnabled = true;
+
         }
 
         private async void StartStepByStepComparison()
@@ -214,19 +214,13 @@ namespace TestProject
             {
                 Cards.Remove(playerSelectedCards[currentStep]);
                 CardsComputer.Remove(computerSelectedCards[currentStep]);
-
-
-                // Compare cards and update their durability
                 playerSelectedCards[currentStep].DurumGuncelle(computerSelectedCards[currentStep]);
                 computerSelectedCards[currentStep].DurumGuncelle(playerSelectedCards[currentStep]);
 
-                // Display step results
                 log($"Step {currentStep + 1}:\n" +
                     $"Player's Card (ID: {playerSelectedCards[currentStep].ID}, Durability: {playerSelectedCards[currentStep].Dayaniklilik})\n" +
                     $"Computer's Card (ID: {computerSelectedCards[currentStep].ID}, Durability: {computerSelectedCards[currentStep].Dayaniklilik})");
 
-
-                // Check for card eliminations
                 if (playerSelectedCards[currentStep].Dayaniklilik <= 0)
                 {
                     playerSelectedCards[currentStep].Dayaniklilik = 0;
@@ -247,7 +241,7 @@ namespace TestProject
                 else
                     CardsComputer.Add(computerSelectedCards[currentStep]);
 
-                await Task.Delay(1000); // Add a delay for better visualization
+                await Task.Delay(1000);
             }
 
             log("Comparison complete!", 2);
@@ -305,6 +299,7 @@ namespace TestProject
                    
                 log("Game Over!.");
                 log($"Scores :\nComputer : {computer.Skor}\n{playerName.Text}: {player.Skor}");
+                sound("Finish.wav");
                 log($"THE WINNER IS {winner.ToUpper()}");
                 Process.Start("log.txt");
                 Application.Current.Shutdown();
@@ -312,15 +307,13 @@ namespace TestProject
 
             log($"Round {currentRound} complete! Cards have been updated.");
 
-            // Add new cards to both the player and computer decks
             AddNewCards();
 
-            // Clear the selected cards from previous rounds
             playerSelectedCards.Clear();
             computerSelectedCards.Clear();
 
-            // Reshow the updated cards
             ReshowCards();
+            sound("Letsgo.wav");
             playButton.IsEnabled = true;
         }
 
@@ -352,7 +345,6 @@ namespace TestProject
             computerSelectedCards.Clear();
             Random random = new Random();
 
-            // Make a copy of the CardsComputer list to modify it without affecting the original list
             List<Savas_Araclari> cardsCopy = new List<Savas_Araclari>(CardsComputer);
 
             while (computerSelectedCards.Count < 3 && cardsCopy.Count > 0)
@@ -360,7 +352,6 @@ namespace TestProject
                 int randIndex = random.Next(cardsCopy.Count);
                 computerSelectedCards.Add(cardsCopy[randIndex]);
 
-                // Remove the selected card to avoid duplicates
                 cardsCopy.RemoveAt(randIndex);
             }
         }
@@ -368,7 +359,7 @@ namespace TestProject
 
         private void showSelected(List<Savas_Araclari> cards, int yPosition, bool isPlayer)
         {
-            double cardSpacing = 300 * sizeFactor; // Space between each card
+            double cardSpacing = 300 * sizeFactor; 
             double totalWidth = cards.Count * cardSpacing;
             int centerX = (int)SystemParameters.PrimaryScreenWidth / 2;
             double startX = centerX - totalWidth / 2 - 600;
@@ -406,7 +397,6 @@ namespace TestProject
 
         static void log(string text,int mod=1)
         {
-            // Open the file and write text
             using (StreamWriter writer = new StreamWriter("log.txt", append: true))
             {
                 writer.WriteLine(text);
@@ -426,17 +416,16 @@ namespace TestProject
                     break;
             }
         }
+        private void sound(string file)
+        {/*
+            file = System.IO.Path.Combine("sounds", file);
+            // Set the sound file path
+            ClickSound.SoundLocation = file;
+            ClickSound.Play(); // Play the sound*/
+        }
+
     }
 }
 
-/*
+
  
-         private void ClickImage_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        {
-            // Set the source of the MediaElement to the click sound file
-            ClickSound.Source = new Uri("click-sound.wav", UriKind.Relative);
-            
-            // Play the sound
-            ClickSound.Play();
-        }
- */

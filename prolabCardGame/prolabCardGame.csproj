@@ -127,5 +127,11 @@
     <Resource Include="image\backSide.png" />
     <Resource Include="image\loginBackground.jpg" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="sounds\Finish.wav" />
+    <Content Include="sounds\Letsgo.wav" />
+    <Content Include="sounds\Play.wav" />
+    <Content Include="sounds\Secme.wav" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
