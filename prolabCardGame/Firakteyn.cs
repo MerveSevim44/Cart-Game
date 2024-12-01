@@ -31,59 +31,70 @@ namespace TestProject
         }
 
 
- public override void DurumGuncelle(Savas_Araclari otherCard )
- {
-     if (otherCard is Ucak)
-     {
-         Ucak rivalUcak = (Ucak)otherCard;
-         this.Dayaniklilik -= rivalUcak.Vurus;
-       
+        public override void DurumGuncelle(Savas_Araclari otherCard )
+        {
+            if (otherCard is Ucak)
+            {
+                Ucak rivalUcak = (Ucak)otherCard;
+                this.Dayaniklilik -= rivalUcak.Vurus;
+
+                if (rivalUcak.Dayaniklilik <= 0)
+                    this.Seviye_Puani += rivalUcak.Seviye_Puani + 10;
+
+            }
+
+            else if (otherCard is Obus)
+            {
+                Obus rivalObus = (Obus)otherCard;
+                this.Dayaniklilik -= rivalObus.Vurus + rivalObus.DenizVurusAvantaji;
+
+                if (rivalObus.Dayaniklilik <= 0)
+                    this.Seviye_Puani += rivalObus.Seviye_Puani + 10;
+            }
+
+            else if (otherCard is Firakteyn)
+            {
+
+                Firakteyn rivalFirakteyn = (Firakteyn)otherCard;
+                this.Dayaniklilik -= rivalFirakteyn.Vurus;
+
+                if (rivalFirakteyn.Dayaniklilik <= 0)
+                    this.Seviye_Puani += rivalFirakteyn.Seviye_Puani + 10;
+
+            }
+
+            else if (otherCard is Sida)
+            {
+                Sida rivalSida = (Sida)otherCard;
+                this.Dayaniklilik -= rivalSida.Vurus;
+
+                if (rivalSida.Dayaniklilik <= 0)
+                    this.Seviye_Puani += rivalSida.Seviye_Puani + 10;
+
+            }
+
+            else if (otherCard is Siha)
+            {
+                Siha rivalSiha = (Siha)otherCard;
+                this.Dayaniklilik -= rivalSiha.Vurus + rivalSiha.DenizVurusAvantaji;
+
+                if (rivalSiha.Dayaniklilik <= 0)
+                    this.Seviye_Puani += rivalSiha.Seviye_Puani + 10;
+
+            }
+            else if (otherCard is KFS)
+            {
+                KFS rivalKFS = (KFS)otherCard;
+                this.Dayaniklilik -= rivalKFS.Vurus + rivalKFS.DenizVurusAvantaji;
+
+                if (rivalKFS.Dayaniklilik <= 0)
+                    this.Seviye_Puani += rivalKFS.Seviye_Puani + 10;
+
+            }
 
 
-     }
+        }
 
-     else if (otherCard is Obus)
-     {
-         Obus rivalObus = (Obus)otherCard;
-         this.Dayaniklilik -= rivalObus.Vurus + rivalObus.DenizVurusAvantaji;
-       
-     }
-
-     else if (otherCard is Firakteyn)
-     {
-
-         Firakteyn rivalFirakteyn = (Firakteyn)otherCard;
-         this.Dayaniklilik -= rivalFirakteyn.Vurus;
-        
-     }
-
-     else if (otherCard is Sida)
-     {
-         Sida rivalSida = (Sida)otherCard;
-         this.Dayaniklilik -= rivalSida.Vurus;
-        
-     }
-
-     else if (otherCard is Siha)
-     {
-         Siha rivalSiha = (Siha)otherCard;
-         this.Dayaniklilik -= rivalSiha.Vurus + rivalSiha.DenizVurusAvantaji;
-         
-     }
-     else if (otherCard is KFS)
-     {
-         KFS rivalKFS = (KFS)otherCard;
-         this.Dayaniklilik -= rivalKFS.Vurus + rivalKFS.DenizVurusAvantaji;
-        
-     }
-
-     if (otherCard.Dayaniklilik <= 0)
-     {
-         this.Seviye_Puani += otherCard.Seviye_Puani + 10;
-     }
-
-
- }
 
         public override void KartPuaniGoster()
         {

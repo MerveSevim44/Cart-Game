@@ -20,138 +20,143 @@ using System.Windows.Threading;
 
 namespace TestProject
 {
-
     public partial class Game : Window
     {
-        List<Savas_Araclari> Kartlar;
-        List<Savas_Araclari> KartlarComputer;
+
+        List<Canvas> selectedCanvasesP = new List<Canvas>();
+        List<Canvas> selectedCanvasesC = new List<Canvas>();
+        Oyuncu player = new Oyuncu(10, "Oyuncu", 0);
+        Oyuncu computer = new Oyuncu();
+
+        List<Savas_Araclari> Kartlar = new List<Savas_Araclari>();
+        List<Savas_Araclari> KartlarComputer = new List<Savas_Araclari>();
 
         List<Savas_Araclari> playerSelectedCards = new List<Savas_Araclari>();
         List<Savas_Araclari> computerSelectedCards = new List<Savas_Araclari>();
 
-        List <Savas_Araclari> newCardComputer = new List<Savas_Araclari>();
-        List<Savas_Araclari> newCardPlayer = new List<Savas_Araclari>();
-        List<Savas_Araclari> allPossibleCards = new List<Savas_Araclari>();
-        private Dictionary<Savas_Araclari, int> cardSelectionCounts = new Dictionary<Savas_Araclari, int>();
+        double sizeFactor = 1.0;
+        private int currentStep = 0;
+        private int currentRound = 0;
+        private const int totalRounds = 5;
 
         public Game()
         {
             InitializeComponent();
 
-            // Initialize all possible cards (this depends on your Savas_Araclari class definition)
-            allPossibleCards = InitializeAllPossibleCards();
-
-            Oyuncu player = new Oyuncu(10, "Oyuncu", 0);
+            // Initialize player and computer cards
             Kartlar = player.KartSec();
-            allPossibleCards = allPossibleCards.Except(Kartlar).ToList(); // Remove player's cards from the pool
-
-            Oyuncu computer = new Oyuncu();
             KartlarComputer = computer.KartSec();
-            allPossibleCards = allPossibleCards.Except(KartlarComputer).ToList(); // Remove computer's cards from the pool
 
-            addCanvases(Kartlar, 450, true); // Show player cards at Y position 450
-            addCanvases(KartlarComputer, 10, false); // Show computer cards at Y position 10
+            if (Kartlar == null || KartlarComputer == null || !Kartlar.Any() || !KartlarComputer.Any())
+            {
+                MessageBox.Show("Error: Cards could not be initialized. Check card selection logic.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            ReshowCards();
         }
 
-
-        private void addCanvases(List<Savas_Araclari> Kartlar, int yPosition , bool show)
+        private void addCanvases(List<Savas_Araclari> cards, int yPosition, bool show)
         {
+            double cardSpacing = 300 * sizeFactor; // Space between each card
+            double totalWidth = cards.Count * cardSpacing;
+            int centerX = (int)SystemParameters.PrimaryScreenWidth / 2;
+            double startX = centerX - totalWidth / 2 - 600;
 
-            int cardSpacing = 150; // Space between each card
-            int totalWidth = Kartlar.Count * cardSpacing;
-
-            int centerX = 1024 / 2; // Assuming screen width is 1024
-            int startX = centerX - totalWidth / 2 + 60;
-
-            for (int i = 0; i < Kartlar.Count; i++)
+            for (int i = 0; i < cards.Count; i++)
             {
-                Canvas canvas = CreateCanvas(Kartlar[i], startX + i * cardSpacing, yPosition , show);
+                Canvas canvas = CreateCanvas(cards[i], startX + i * cardSpacing, yPosition, show);
+                if (show)
+                {
+                    var currentCard = cards[i];
+                    canvas.MouseLeftButtonDown += (sender, e) => Canvas_MouseLeftButtonDown(sender, e, currentCard);
+                }
                 MainGrid.Children.Add(canvas);
             }
         }
 
-        private Canvas CreateCanvas(Savas_Araclari card, int xPosition, int yPosition, bool show)
+        private Canvas CreateCanvas(Savas_Araclari card, double xPosition, int yPosition, bool show)
         {
+            if (card == null)
+                throw new ArgumentNullException(nameof(card), "Card cannot be null.");
+
             Canvas canvas = new Canvas
             {
                 Margin = new Thickness(xPosition, yPosition, 0, 0),
-                Tag = card // Store the card object in the Tag property
+                Tag = card,
+                Width = 131 * sizeFactor,
+                Height = 202 * sizeFactor
             };
 
             Image cardImage = new Image
             {
                 Source = new BitmapImage(new Uri("/image/" + (show ? card.ToString() : "backSide") + ".png", UriKind.Relative)),
                 Stretch = Stretch.Uniform,
-                Height = 202,
-                Width = 131,
-                Tag = card // Store the card object in the Tag
+                Height = 202 * sizeFactor,
+                Width = 131 * sizeFactor,
+                Tag = card
             };
-            Canvas.SetLeft(cardImage, 26);
-            Canvas.SetTop(cardImage, 20);
+
+            Canvas.SetLeft(cardImage, 26 * sizeFactor);
+            Canvas.SetTop(cardImage, 20 * sizeFactor);
             canvas.Children.Add(cardImage);
 
-            // Add labels (with visibility control for computer cards)
-            Label label1 = CreateLabel(card.Dayaniklilik + "", 49, 20, 85, 122, VerticalAlignment.Top);
-            label1.Visibility = show ? Visibility.Visible : Visibility.Hidden; // Hide labels for computer
-            canvas.Children.Add(label1);
-
-            Label label2 = CreateLabel(card.ID + "", 49, 20, 60, 105, VerticalAlignment.Top);
-            label2.Visibility = show ? Visibility.Visible : Visibility.Hidden; // Hide labels for computer
-            canvas.Children.Add(label2);
-
-            Label label3 = CreateLabel(card.Seviye_Puani + "", 49, 20, 90, 165, VerticalAlignment.Center);
-            label3.Visibility = show ? Visibility.Visible : Visibility.Hidden; // Hide labels for computer
-            canvas.Children.Add(label3);
-
-            // Attach event handler only for player's cards
             if (show)
             {
-                canvas.MouseLeftButtonDown += (sender, e) => Canvas_MouseLeftButtonDown(sender, e, card);
+                AddCardLabels(canvas, card);
             }
 
             return canvas;
         }
 
+        private void AddCardLabels(Canvas canvas, Savas_Araclari card)
+        {
+            if (card == null) return;
 
+            Label label1 = CreateLabel(card.Dayaniklilik.ToString(), 49 * sizeFactor, 20 * sizeFactor, 85 * sizeFactor, 122 * sizeFactor, VerticalAlignment.Top);
+            Label label2 = CreateLabel(card.ID.ToString(), 49 * sizeFactor, 20 * sizeFactor, 60 * sizeFactor, 105 * sizeFactor, VerticalAlignment.Top);
+            Label label3 = CreateLabel(card.Seviye_Puani.ToString(), 49 * sizeFactor, 20 * sizeFactor, 90 * sizeFactor, 165 * sizeFactor, VerticalAlignment.Center);
+
+            canvas.Children.Add(label1);
+            canvas.Children.Add(label2);
+            canvas.Children.Add(label3);
+        }
 
         private void Canvas_MouseLeftButtonDown(object sender, MouseButtonEventArgs e, Savas_Araclari card)
         {
-            if (!playerSelectedCards.Contains(card) && playerSelectedCards.Count < 3)
+            if (card == null)
+            {
+                MessageBox.Show("Error: Selected card is null.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            if (playerSelectedCards.Count < 3 && !playerSelectedCards.Contains(card))
             {
                 playerSelectedCards.Add(card);
-                ApplySelectedEffect(sender as Canvas);
-
-                //// Update selection count
-                //if (cardSelectionCounts.ContainsKey(card))
-                //{
-                //    cardSelectionCounts[card]++;
-                //}
-                //else
-                //{
-                //    cardSelectionCounts[card] = 1;
-                //}
+                ApplySelectedEffect(sender as Canvas, Colors.Green);
             }
             else if (playerSelectedCards.Contains(card))
             {
                 playerSelectedCards.Remove(card);
                 RemoveSelectedEffect(sender as Canvas);
             }
-          
+            else
+            {
+                MessageBox.Show("You can't select more than 3 cards!", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
         }
 
-
-        private void ApplySelectedEffect(Canvas canvas)
+        private void ApplySelectedEffect(Canvas canvas, Color color)
         {
             if (canvas == null) return;
 
-            var greenOutlineEffect = new DropShadowEffect
+            canvas.Effect = new DropShadowEffect
             {
-                Color = Colors.Green,
+                Color = color,
                 ShadowDepth = 0,
                 BlurRadius = 40,
                 Opacity = 1
             };
-            canvas.Effect = greenOutlineEffect;
         }
 
         private void RemoveSelectedEffect(Canvas canvas)
@@ -162,7 +167,7 @@ namespace TestProject
 
         private Label CreateLabel(string content, double width, double height, double left, double top, VerticalAlignment verticalAlignment)
         {
-            Label label = new Label
+            return new Label
             {
                 Content = content,
                 Width = width,
@@ -170,296 +175,173 @@ namespace TestProject
                 FontFamily = new FontFamily("Times New Roman"),
                 FontSize = 9,
                 HorizontalAlignment = HorizontalAlignment.Left,
-                VerticalAlignment = verticalAlignment
+                VerticalAlignment = verticalAlignment,
+                Margin = new Thickness(left, top, 0, 0)
             };
-            Canvas.SetLeft(label, left);
-            Canvas.SetTop(label, top);
-            return label;
         }
 
-        private void randomSelectCopmputerCards()
+        private void ReshowCards()
         {
-            computerSelectedCards.Clear();
-            Random random = new Random();
-            List<Savas_Araclari> availableCards = new List<Savas_Araclari>(KartlarComputer);
-
-
-            while (computerSelectedCards.Count < 3 && availableCards.Count > 0)
-            {
-                int index = random.Next(availableCards.Count);
-                computerSelectedCards.Add(availableCards[index]);
-                availableCards.RemoveAt(index);
-            }
+            MainGrid.Children.OfType<Canvas>().ToList().ForEach(canvas => MainGrid.Children.Remove(canvas));
+            addCanvases(Kartlar, 500, true);
+            addCanvases(KartlarComputer, -600, false);
         }
 
-        private void RemoveUnselectedCards()
+        private void Play_Click(object sender, RoutedEventArgs e)
         {
-            List<Savas_Araclari> allKartlarP =new  List<Savas_Araclari>(Kartlar);
-            List<Savas_Araclari> allKartlarC = new List<Savas_Araclari>(KartlarComputer);
-            // Clear the current cards from the grid
-            for (int i = MainGrid.Children.Count - 1; i >= 0; i--)
+            if (playerSelectedCards.Count < 3)
             {
-                if (MainGrid.Children[i] is Canvas || MainGrid.Children[i] is Image)
+                MessageBox.Show("Please select 3 cards before proceeding.", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            randomSelectComputerCards();
+            RemoveUnselectedCards();
+            StartStepByStepComparison();
+        }
+        private async void StartStepByStepComparison()
+        {
+            for (currentStep = 0; currentStep < 3; currentStep++)
+            {
+                // Ensure there are enough cards to compare
+                if (currentStep >= playerSelectedCards.Count || currentStep >= computerSelectedCards.Count)
                 {
-                    MainGrid.Children.RemoveAt(i);
-                }
-            }
-
-            int playerCardSpacing = 150;
-            int playerStartX = (1024 / 2) - (playerSelectedCards.Count * playerCardSpacing / 2) + 60;
-            int playerYPosition = 450;
-
-            // Add the player's selected cards to the grid
-            for (int i = 0; i < playerSelectedCards.Count; i++)
-            {
-                Canvas playerCanvas = CreateCanvas(playerSelectedCards[i], playerStartX + i * playerCardSpacing, playerYPosition, true);
-                MainGrid.Children.Add(playerCanvas);
-            }
-
-            // Add the player's new card to the grid
-            if (newCardPlayer.Count > 0)
-            {
-                int newCardX = playerStartX + playerSelectedCards.Count * playerCardSpacing;
-                Canvas newPlayerCanvas = CreateCanvas(newCardPlayer.Last(), newCardX, playerYPosition, true);
-                MainGrid.Children.Add(newPlayerCanvas);
-            }
-
-            int computerCardSpacing = 150;
-            int computerStartX = (1024 / 2) - (computerSelectedCards.Count * computerCardSpacing / 2) + 60;
-            int computerYPosition = 10;
-
-            // Add the computer's selected cards to the grid
-            for (int i = 0; i < computerSelectedCards.Count; i++)
-            {
-                Canvas computerCanvas = CreateCanvas(computerSelectedCards[i], computerStartX + i * computerCardSpacing, computerYPosition, true);
-
-                // Make labels visible for computer cards
-                foreach (var child in computerCanvas.Children)
-                {
-                    if (child is Label label)
-                    {
-                        label.Visibility = Visibility.Visible; // Reveal labels after Play button
-                    }
+                    MessageBox.Show("Error: Insufficient cards for comparison. Please check the card selection logic.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
                 }
 
-                MainGrid.Children.Add(computerCanvas);
-            }
-
-            // Add the computer's new card to the grid
-            if (newCardComputer.Count > 0)
-            {
-                int newCardX = computerStartX + computerSelectedCards.Count * computerCardSpacing;
-                Canvas newComputerCanvas = CreateCanvas(newCardComputer.Last(), newCardX, computerYPosition, false);
-                MainGrid.Children.Add(newComputerCanvas);
-            }
-
-            Kartlar = new List<Savas_Araclari>(allKartlarP);
-            KartlarComputer = new List<Savas_Araclari>(allKartlarC);
-        }
-
-        private DispatcherTimer stepTimer;
-        private int currentStep = 0;
-
-
-        private void CompareAndUpdateStep()
-        {
-            if (currentStep < 3)
-            {
                 Savas_Araclari playerCard = playerSelectedCards[currentStep];
                 Savas_Araclari computerCard = computerSelectedCards[currentStep];
 
-                // Compare and update cards' durability
+                // Compare cards and update their durability
                 playerCard.DurumGuncelle(computerCard);
                 computerCard.DurumGuncelle(playerCard);
 
-                // Show results for this step
+                // Display step results
                 MessageBox.Show($"Step {currentStep + 1}:\n" +
-                    $"Player's card ID {playerCard.ID}, Durability: {playerCard.Dayaniklilik}  \n" +
-                    $"Computer's card ID {computerCard.ID}, Durability: {computerCard.Dayaniklilik}  \n  ");
+                    $"Player's Card (ID: {playerCard.ID}, Durability: {playerCard.Dayaniklilik})\n" +
+                    $"Computer's Card (ID: {computerCard.ID}, Durability: {computerCard.Dayaniklilik})");
 
-                // Check and remove eliminated cards
-                if (computerCard.Dayaniklilik <= 0)
-                {
-                    MessageBox.Show($"Player's card ID {playerCard.ID} eliminates Computer's card ID {computerCard.ID} level score: {playerCard.Seviye_Puani} ");
-                    KartlarComputer.Remove(computerCard);
-                }
-
+                // Check for card eliminations
                 if (playerCard.Dayaniklilik <= 0)
                 {
-                    MessageBox.Show($"Computer's card ID {computerCard.ID} eliminates Player's card ID {playerCard.ID} level score: {computerCard.Seviye_Puani}");
+                    MessageBox.Show($"Computer's card (ID: {computerCard.ID}) eliminates Player's card (ID: {playerCard.ID})!");
                     Kartlar.Remove(playerCard);
+                    computerCard.Seviye_Puani += playerCard.Seviye_Puani + 10;
+                    ApplySelectedEffect(selectedCanvasesP[currentStep], Colors.Red);
                 }
 
-                // Move to the next step
-                currentStep++;
-            }
-        }
-
-
-
-        private void StartStepByStepComparison()
-        {
-            currentStep = 0; // Reset step counter
-
-            stepTimer = new DispatcherTimer
-            {
-                Interval = TimeSpan.FromSeconds(2) // 2 seconds between each step
-            };
-
-            stepTimer.Tick += (s, e) =>
-            {
-                CompareAndUpdateStep();
-
-                // Stop the timer when all steps are completed
-                if (currentStep >= 3)
+                if (computerCard.Dayaniklilik <= 0)
                 {
-                    stepTimer.Stop();
-                    MessageBox.Show("Comparison complete!");
-                    DisplayUpdatedDurability(); // Show final durability
+                    MessageBox.Show($"Player's card (ID: {playerCard.ID}) eliminates Computer's card (ID: {computerCard.ID})!");
+                    KartlarComputer.Remove(computerCard);
+                    playerCard.Seviye_Puani += computerCard.Seviye_Puani + 10;
+                    ApplySelectedEffect(selectedCanvasesC[currentStep], Colors.Red);
                 }
-            };
 
-            stepTimer.Start(); // Start the timer
+                await Task.Delay(1000); // Add a delay for better visualization
+            }
+
+            MessageBox.Show("Comparison complete!", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+            DisplayUpdatedDurability();
+        }
+
+        private void AddNewCards()
+        {
+            var randomCards = new List<Savas_Araclari>
+        {
+            new Ucak(0, "Hava", 20, 0, "Ucak"),
+            new Obus(0, "Kara", 20, 0, "Obus"),
+            new Firakteyn(0, "Deniz", 20, 0, "Firkateyn"),
+            new Siha(0, "Hava", 20, 0, "Siha"),
+            new Sida(0, "Deniz", 20, 0, "Sida"),
+            new KFS(0, "Kara", 20, 0, "KFS")
+        };
+
+            Random random = new Random();
+            Kartlar.Add(randomCards[random.Next(player.Skor > 20 ? 6 : 3)]);
+            KartlarComputer.Add(randomCards[random.Next(computer.Skor > 20 ? 6 : 3)]);
+        }
+        private void LetsGo_Click(object sender, RoutedEventArgs e)
+        {
+            currentRound++;
+
+            if (currentRound > totalRounds)
+            {
+                MessageBox.Show("Game Over! The maximum number of rounds has been reached.");
+                this.Close(); // Close the game window
+                return;
+            }
+
+            MessageBox.Show($"Round {currentRound} complete! Cards have been updated.");
+
+            // Add new cards to both the player and computer decks
+            AddNewCards();
+
+            // Clear the selected cards from previous rounds
+            playerSelectedCards.Clear();
+            computerSelectedCards.Clear();
+
+            // Reshow the updated cards
+            ReshowCards();
         }
 
 
-
-
-
-        // Example method to display updated durability
         private void DisplayUpdatedDurability()
         {
             string playerDurability = string.Join(", ", playerSelectedCards.Select(card => card.Dayaniklilik.ToString()));
             string computerDurability = string.Join(", ", computerSelectedCards.Select(card => card.Dayaniklilik.ToString()));
 
             MessageBox.Show($"Player Durability: {playerDurability}\nComputer Durability: {computerDurability}");
-      }
-
-
-
-        private List<Savas_Araclari> InitializeAllPossibleCards()
-        {
-            List<Savas_Araclari> allCards = new List<Savas_Araclari>();
-
-            // Example: Add different types of cards
-            for (int i = 1; i <= 5; i++) // Add 5 Ucak cards for example
-            {
-                allCards.Add(new Ucak(0, "Hava", 20, 0, "Ucak"));
-                allCards.Add(new Obus(0, "Kara", 20, 0, "Obus"));
-                allCards.Add(new Firakteyn(0, "Deniz", 25, 0, "Firkateyn"));
-            }
-
-
-
-            return allCards;
         }
 
 
-        private Savas_Araclari GetUniqueNewCard()
+        private void randomSelectComputerCards()
         {
-            if (allPossibleCards.Count == 0)
-            {
-                throw new InvalidOperationException("No more unique cards available!");
-            }
-
+            computerSelectedCards.Clear();
             Random random = new Random();
-            int index = random.Next(allPossibleCards.Count); // Pick a random card from the pool
-            Savas_Araclari newCard = allPossibleCards[index];
-            allPossibleCards.RemoveAt(index); // Remove the card from the pool to avoid duplicates
-            return newCard;
-        }
 
-        private void AddNewCards()
-        {
-            // Add new card for player
-            Savas_Araclari newPlayerCard = GetUniqueNewCard();
-            Kartlar.Add(newPlayerCard); // Add to player's card list
-            playerSelectedCards.Add(newPlayerCard);
-
-            // Add new card for computer
-            Savas_Araclari newComputerCard = GetUniqueNewCard();
-            KartlarComputer.Add(newComputerCard); // Add to computer's card list
-            computerSelectedCards.Add(newComputerCard);
-        }
-
-
-        private void Play_Click(object sender, RoutedEventArgs e)
-        {
-            if (playerSelectedCards.Count < 3)
+            while (computerSelectedCards.Count < 3)
             {
-                MessageBox.Show("Please choose a choice!", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
-            }
-            else
-            {
-                randomSelectCopmputerCards();
-                AddNewCards(); // Add new unique cards
-                RemoveUnselectedCards();
-                // Compare and update the cards
-                StartStepByStepComparison();
-
+                int randIndex = random.Next(KartlarComputer.Count);
+                computerSelectedCards.Add(KartlarComputer[randIndex]);
             }
         }
 
-
-        private void ReshowCards()
+        private void showSelected(List<Savas_Araclari> cards, int yPosition, bool isPlayer)
         {
-            // Remove all children except the Play and Let's Go buttons
-            foreach (var child in MainGrid.Children.OfType<UIElement>().ToList())
+            double cardSpacing = 300 * sizeFactor; // Space between each card
+            double totalWidth = cards.Count * cardSpacing;
+            int centerX = (int)SystemParameters.PrimaryScreenWidth / 2;
+            double startX = centerX - totalWidth / 2 - 600;
+
+            for (int i = 0; i < cards.Count; i++)
             {
-                // Keep Play and Let's Go buttons by checking their names
-                if (child is Button button)
+                Canvas canvas = CreateCanvas(cards[i], startX + i * cardSpacing, yPosition, true);
+                if (isPlayer)
                 {
-                    if (button.Name != "Play" && button.Name != "LetsGo")
-                    {
-                        MainGrid.Children.Remove(child);
-                    }
+                    selectedCanvasesP.Add(canvas);
                 }
                 else
-                {
-                    // Remove other UI elements (e.g., canvases, images) from the grid
-                    MainGrid.Children.Remove(child);
-                }
-            }
-         
-            // Re-show player's remaining cards
-            addCanvases(Kartlar, 450, true);  // Player cards at Y position 450
+                    selectedCanvasesC.Add(canvas);
 
-            // Re-show computer's remaining cards
-            addCanvases(KartlarComputer, 10, false);  // Computer cards at Y position 100
+                MainGrid.Children.Add(canvas);
+            }
         }
-
-
-        private int currentRound = 0;
-        private const int totalRounds = 5;
-
-        private void LetsGo_Click(object sender, RoutedEventArgs e)
+        private void RemoveUnselectedCards()
         {
-            // Increment the current round
-            currentRound++;
-
-            // Check if the game is over
-            if (currentRound > totalRounds)
+            selectedCanvasesP.Clear();
+            selectedCanvasesC.Clear();
+            MainGrid.Children.OfType<Canvas>().ToList().ForEach(canvas => MainGrid.Children.Remove(canvas));
+            showSelected(playerSelectedCards, 500, true);
+            showSelected(computerSelectedCards, -600, false);
+        }
+        private void exit(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            if (e.Key == System.Windows.Input.Key.Escape)
             {
-                MessageBox.Show("Game Over! The maximum rounds are reached.");
-                return;
+                Application.Current.Shutdown();
             }
-
-            // Step 2: Re-show the current remaining cards for both the player and the computer
-            ReshowCards();
-
-            // Step 3: Proceed with the next round logic (e.g., Player chooses cards)
-            if (currentRound <= totalRounds)
-            { 
-                // Computer randomly selects cards for the new round
-                randomSelectCopmputerCards();
-
-            }
-
-            // Optionally show round-specific message or visual update
-            MessageBox.Show($"Round {currentRound} complete! Cards have been updated.");
-           
         }
     }
-
-
 }

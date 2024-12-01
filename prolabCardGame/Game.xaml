@@ -5,7 +5,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TestProject"
         mc:Ignorable="d"
-        Title="Game XAML" Height="696" Width="1196">
+        WindowState="Maximized" 
+        WindowStyle="None"
+        ResizeMode="NoResize"
+        KeyDown="exit"
+        Title="Game XAML" >
 
 
 
@@ -115,7 +119,7 @@
 
 
 
-    <Grid x:Name="MainGrid" RenderTransformOrigin="0.495,0.614" Margin="1,-21,0,0" Height="700" VerticalAlignment="Top">
+    <Grid x:Name="MainGrid" RenderTransformOrigin="0.495,0.614" Height="718" VerticalAlignment="Center" Width="1137">
 
         <Grid.RenderTransform>
             <TransformGroup>
@@ -130,22 +134,22 @@
         <TextBlock Name="tbHello"
    Text="Player"
    FontSize="60"
-   Margin="506,322,490,0"
+   Margin="476,368,0,0"
    VerticalAlignment="Top"
    RenderTransformOrigin="0.298,-0.8"
    FontFamily="Modern No. 20"
    Foreground="Black"
-   FontStyle="Italic"  FontWeight="Bold" Height="62"/>
-        <Button Content="Let's Go"  Style="{StaticResource FancyButtonStyle}" HorizontalAlignment="Left" VerticalAlignment="Top" Height="34" Width="101" FontFamily="Forte" Margin="372,294,0,0"/>
-        <Button Content="Play"  Style="{StaticResource FancyButtonStyle}" Height="32" Width="91" HorizontalAlignment="Left" VerticalAlignment="Top" FontFamily="Forte" Margin="712,292,0,0" Click="Play_Click"/>
+   FontStyle="Italic"  FontWeight="Bold" Height="62" HorizontalAlignment="Left" Width="191"/>
+        <Button x:Name="LetsGo" Content="LetsGo"  Style="{StaticResource FancyButtonStyle}" VerticalAlignment="Top" Height="34" FontFamily="Forte" Margin="371,346,0,0" Click="LetsGo_Click" HorizontalAlignment="Left" Width="65"/>
+        <Button  x:Name="Play" Content="Play"  Style="{StaticResource FancyButtonStyle}" Height="32" VerticalAlignment="Top" FontFamily="Forte" Margin="699,346,0,0" Click="Play_Click" HorizontalAlignment="Left" Width="65"/>
         <TextBlock x:Name="tbHello_Copy"
             FontSize="60"
-            Margin="468,234,460,0"
+            Margin="443,280,0,0"
             VerticalAlignment="Top"
             RenderTransformOrigin="0.298,-0.8"
             FontFamily="Modern No. 20"
             Foreground="Black"
-            FontStyle="Italic"  FontWeight="Bold" Height="65">
+            FontStyle="Italic"  FontWeight="Bold" Height="65" HorizontalAlignment="Left" Width="257">
             <Run Language="tr-tr" Text="Computer"/>
         </TextBlock>
 

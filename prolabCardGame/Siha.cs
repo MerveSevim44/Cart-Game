@@ -12,6 +12,8 @@ namespace TestProject
         public override string AltSinif { get; set; } = "Siha";
         public override int KaraVurusAvantaji { get; set; } = 10;
 
+
+
         public int DenizVurusAvantaji { get; set; } = 10;
         public override int ID { get; set; } = 010200;
         public static int sayac { get; set; } = 0;
@@ -24,62 +26,79 @@ namespace TestProject
         {
             return $"{AltSinif}  ";
         }
-        public Siha(int seviyePuani, string sinif,int dayaniklilik, string altSinif,int Secilme_sayisi) : base(seviyePuani, sinif)
+        public Siha(int seviyePuani, string sinif,int dayaniklilik,int Secilme_sayisi, string altSinif) : base(seviyePuani, sinif)
         {
             ID += ++sayac;
             AltSinif = altSinif;
         }
 
-  public override void DurumGuncelle(Savas_Araclari otherCard )
-  {
-      if (otherCard is Ucak)
-      {
-          Ucak rivalUcak = (Ucak)otherCard;
-          this.Dayaniklilik -= rivalUcak.Vurus;
-         
+        public override void DurumGuncelle(Savas_Araclari otherCard )
+        {
+            if (otherCard is Ucak)
+            {
+                Ucak rivalUcak = (Ucak)otherCard;
+                this.Dayaniklilik -= rivalUcak.Vurus;
 
-      }
 
-      else if (otherCard is Obus)
-      {
-          Obus rivalObus = (Obus)otherCard;
-          this.Dayaniklilik -= rivalObus.Vurus;
-         
-      }
+                if (rivalUcak.Dayaniklilik <= 0)
+                    this.Seviye_Puani += rivalUcak.Seviye_Puani + 10;
 
-      else if (otherCard is Firakteyn)
-      {
 
-          Firakteyn rivalFirakteyn = (Firakteyn)otherCard;
-          this.Dayaniklilik -= rivalFirakteyn.Vurus + rivalFirakteyn.HavaVurusAvantaji;
-          
-      }
+            }
 
-      else if (otherCard is Sida)
-      {
-          Sida rivalSida = (Sida)otherCard;
-          this.Dayaniklilik -= rivalSida.Vurus + rivalSida.HavaVurusAvantaji;
-         
-      }
+            else if (otherCard is Obus)
+            {
+                Obus rivalObus = (Obus)otherCard;
+                this.Dayaniklilik -= rivalObus.Vurus;
 
-      else if (otherCard is Siha)
-      {
-          Siha rivalSiha = (Siha)otherCard;
-          this.Dayaniklilik -= rivalSiha.Vurus;
-         
-      }
-      else if (otherCard is KFS)
-      {
-          KFS rivalKFS = (KFS)otherCard;
-          this.Dayaniklilik -= rivalKFS.Vurus + rivalKFS.HavaVurusAvantaji;
+                if (rivalObus.Dayaniklilik <= 0)
+                    this.Seviye_Puani += rivalObus.Seviye_Puani + 10;
 
-      }
+            }
 
-      if (otherCard.Dayaniklilik <= 0)
-      {
-          this.Seviye_Puani += otherCard.Seviye_Puani + 10;
-      }
-  }
+            else if (otherCard is Firakteyn)
+            {
+
+                Firakteyn rivalFirakteyn = (Firakteyn)otherCard;
+                this.Dayaniklilik -= rivalFirakteyn.Vurus + rivalFirakteyn.HavaVurusAvantaji;
+
+                if (rivalFirakteyn.Dayaniklilik <= 0)
+                    this.Seviye_Puani += rivalFirakteyn.Seviye_Puani + 10;
+
+
+            }
+
+            else if (otherCard is Sida)
+            {
+                Sida rivalSida = (Sida)otherCard;
+                this.Dayaniklilik -= rivalSida.Vurus + rivalSida.HavaVurusAvantaji;
+
+                if (rivalSida.Dayaniklilik <= 0)
+                    this.Seviye_Puani += rivalSida.Seviye_Puani + 10;
+
+            }
+
+            else if (otherCard is Siha)
+            {
+                Siha rivalSiha = (Siha)otherCard;
+                this.Dayaniklilik -= rivalSiha.Vurus;
+
+                if (rivalSiha.Dayaniklilik <= 0)
+                    this.Seviye_Puani += rivalSiha.Seviye_Puani + 10;
+
+            }
+            else if (otherCard is KFS)
+            {
+                KFS rivalKFS = (KFS)otherCard;
+                this.Dayaniklilik -= rivalKFS.Vurus + rivalKFS.HavaVurusAvantaji;
+
+                if (rivalKFS.Dayaniklilik <= 0)
+                    this.Seviye_Puani += rivalKFS.Seviye_Puani + 10;
+
+            }
+
+        }
+
 
         public override void KartPuaniGoster()
         {

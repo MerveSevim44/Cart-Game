@@ -15,15 +15,12 @@ namespace TestProject
         public abstract int ID {  get; set; }
         
         public abstract string AltSinif { get; set; }   
+        public static int sayac  { get; set; }  = 0;
 
         public Savas_Araclari(int seviyePuani)
         {
             Seviye_Puani = seviyePuani; 
-        }
-
-
-       
-
+        }     
 
         public virtual void KartPuaniGoster()
         {
