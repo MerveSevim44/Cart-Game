@@ -34,24 +34,18 @@ namespace TestProject
         List<Savas_Araclari> playerSelectedCards = new List<Savas_Araclari>();
         List<Savas_Araclari> computerSelectedCards = new List<Savas_Araclari>();
 
-        double sizeFactor = 1.0;
+        double sizeFactor = 1.2;
         private int currentStep = 0;
         private int currentRound = 0;
         private const int totalRounds = 5;
 
-        public Game()
+        public Game(String UserName)
         {
             InitializeComponent();
-
-            // Initialize player and computer cards
             Kartlar = player.KartSec();
-            KartlarComputer = computer.KartSec();
+            playerName.Text = UserName;
 
-            if (Kartlar == null || KartlarComputer == null || !Kartlar.Any() || !KartlarComputer.Any())
-            {
-                MessageBox.Show("Error: Cards could not be initialized. Check card selection logic.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                return;
-            }
+            KartlarComputer = computer.KartSec();
 
             ReshowCards();
         }
@@ -183,8 +177,8 @@ namespace TestProject
         private void ReshowCards()
         {
             MainGrid.Children.OfType<Canvas>().ToList().ForEach(canvas => MainGrid.Children.Remove(canvas));
-            addCanvases(Kartlar, 500, true);
-            addCanvases(KartlarComputer, -600, false);
+            addCanvases(Kartlar, 450, true);
+            addCanvases(KartlarComputer, -200, false);
         }
 
         private void Play_Click(object sender, RoutedEventArgs e)
@@ -225,14 +219,17 @@ namespace TestProject
                 // Check for card eliminations
                 if (playerCard.Dayaniklilik <= 0)
                 {
+                    playerCard.Dayaniklilik = 0;
                     MessageBox.Show($"Computer's card (ID: {computerCard.ID}) eliminates Player's card (ID: {playerCard.ID})!");
                     Kartlar.Remove(playerCard);
                     computerCard.Seviye_Puani += playerCard.Seviye_Puani + 10;
+
                     ApplySelectedEffect(selectedCanvasesP[currentStep], Colors.Red);
                 }
 
                 if (computerCard.Dayaniklilik <= 0)
                 {
+                    computerCard.Dayaniklilik = 0;
                     MessageBox.Show($"Player's card (ID: {playerCard.ID}) eliminates Computer's card (ID: {computerCard.ID})!");
                     KartlarComputer.Remove(computerCard);
                     playerCard.Seviye_Puani += computerCard.Seviye_Puani + 10;
@@ -264,11 +261,18 @@ namespace TestProject
         }
         private void LetsGo_Click(object sender, RoutedEventArgs e)
         {
+            MessageBox.Show($"Scores :\nComputer : {computer.Skor}\n{playerName.Text}: {player.Skor}");
+
             currentRound++;
 
-            if (currentRound > totalRounds)
+            if (currentRound > totalRounds || Kartlar.Count == 0 || KartlarComputer.Count == 0)
             {
-                MessageBox.Show("Game Over! The maximum number of rounds has been reached.");
+                String winner = player.Skor > computer.Skor ? playerName.Text : "Computer";
+                MessageBox.Show("Game Over!.");
+                MessageBox.Show($"Scores :\nComputer : {computer.Skor}\n{playerName.Text}: {player.Skor}");
+                MessageBox.Show($"THE WINNER IS {winner.ToUpper()}");
+
+
                 this.Close(); // Close the game window
                 return;
             }
@@ -333,8 +337,8 @@ namespace TestProject
             selectedCanvasesP.Clear();
             selectedCanvasesC.Clear();
             MainGrid.Children.OfType<Canvas>().ToList().ForEach(canvas => MainGrid.Children.Remove(canvas));
-            showSelected(playerSelectedCards, 500, true);
-            showSelected(computerSelectedCards, -600, false);
+            showSelected(playerSelectedCards, 450, true);
+            showSelected(computerSelectedCards, -200, false);
         }
         private void exit(object sender, System.Windows.Input.KeyEventArgs e)
         {

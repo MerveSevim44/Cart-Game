@@ -23,9 +23,6 @@ namespace TestProject
     {
         public MainWindow()
         {
-            Game game = new Game();
-            game.Show();
-            this.Close();
             InitializeComponent();
         }
 
@@ -36,7 +33,7 @@ namespace TestProject
 
             if(!string.IsNullOrEmpty(UserName) && !string.IsNullOrEmpty(UserId))
             {
-                Game game = new Game();
+                Game game = new Game(UserName);
                 game.Show();
                 this.Close();
             }
@@ -46,7 +43,14 @@ namespace TestProject
             }
 
 
-            
+
+        }
+        private void exit(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                Button_Click(sender, e);
+            }
         }
     }
 }
