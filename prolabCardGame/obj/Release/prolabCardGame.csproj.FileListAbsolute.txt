@@ -1,7 +1,0 @@
-C:\Users\merve\OneDrive\Desktop\prolabCardGame\prolabCardGame\obj\Release\prolabCardGame.csproj.AssemblyReference.cache
-C:\Users\merve\OneDrive\Desktop\prolabCardGame\prolabCardGame\obj\Release\Game.g.cs
-C:\Users\merve\OneDrive\Desktop\prolabCardGame\prolabCardGame\obj\Release\MainWindow.g.cs
-C:\Users\merve\OneDrive\Desktop\prolabCardGame\prolabCardGame\obj\Release\NewGame.g.cs
-C:\Users\merve\OneDrive\Desktop\prolabCardGame\prolabCardGame\obj\Release\App.g.cs
-C:\Users\merve\OneDrive\Desktop\prolabCardGame\prolabCardGame\obj\Release\prolabCardGame_MarkupCompile.cache
-C:\Users\merve\OneDrive\Desktop\prolabCardGame\prolabCardGame\obj\Release\prolabCardGame_MarkupCompile.lref
