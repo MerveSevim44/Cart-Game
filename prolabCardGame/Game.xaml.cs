@@ -345,35 +345,25 @@ namespace TestProject
 
             log($"Player Durability: {playerDurability}\nComputer Durability: {computerDurability}");
         }
-
         private void randomSelectComputerCards()
         {
             computerSelectedCards.Clear();
             Random random = new Random();
 
-            // Find the minimum selecTimes in the computer's card pool
-            int minSelecTimes = CardsComputer.Min(c => c.selecTimes);
+            // Make a copy of the CardsComputer list to modify it without affecting the original list
+            List<Savas_Araclari> cardsCopy = new List<Savas_Araclari>(CardsComputer);
 
-            // Allowable threshold for selection
-            int threshold = 0; // Adjust this to control balancing
-
-            while (computerSelectedCards.Count < 3)
+            while (computerSelectedCards.Count < 3 && cardsCopy.Count > 0)
             {
-                int randIndex = random.Next(CardsComputer.Count);
-                var selectedCard = CardsComputer[randIndex];
+                int randIndex = random.Next(cardsCopy.Count);
+                computerSelectedCards.Add(cardsCopy[randIndex]);
 
-                // Check if the card is already selected or exceeds the threshold
-                if (computerSelectedCards.Contains(selectedCard))
-                    continue;
-
-                if (selectedCard.selecTimes > minSelecTimes + threshold)
-                    continue;
-
-                // Add the card to the selection and update its selecTimes
-                computerSelectedCards.Add(selectedCard);
-                selectedCard.selecTimes++;
+                // Remove the selected card to avoid duplicates
+                cardsCopy.RemoveAt(randIndex);
             }
         }
+
+
 
         private void showSelected(List<Savas_Araclari> cards, int yPosition, bool isPlayer)
         {
