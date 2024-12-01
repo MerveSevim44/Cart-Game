@@ -119,7 +119,7 @@
 
 
 
-    <Grid x:Name="MainGrid" RenderTransformOrigin="0.495,0.614" Height="718" VerticalAlignment="Center" Width="1137">
+    <Grid x:Name="MainGrid" RenderTransformOrigin="0.495,0.614" Height="718" VerticalAlignment="Center" Width="1137" HorizontalAlignment="Center">
         <Grid.RowDefinitions>
             <RowDefinition Height="180*"/>
             <RowDefinition Height="180*"/>
@@ -141,17 +141,15 @@
    VerticalAlignment="Top"
    RenderTransformOrigin="0.298,-0.8"
    FontFamily="Modern No. 20"
-   Foreground="Black"
-   FontStyle="Italic"  FontWeight="Bold" Height="62" HorizontalAlignment="Left" Width="397" TextAlignment="Center" Grid.Row="1" Margin="360,16,0,0"/>
-        <Button x:Name="LetsGo" Content="LetsGo"  Style="{StaticResource FancyButtonStyle}" VerticalAlignment="Top" Height="34" FontFamily="Forte" Margin="371,344,0,0" Click="LetsGo_Click" HorizontalAlignment="Left" Width="65" Grid.RowSpan="2"/>
-        <Button  x:Name="Play" Content="Play"  Style="{StaticResource FancyButtonStyle}" Height="32" VerticalAlignment="Top" FontFamily="Forte" Margin="699,344,0,0" Click="Play_Click" HorizontalAlignment="Left" Width="65" Grid.RowSpan="2"/>
+   Foreground="Black"  FontWeight="Bold" Height="62" HorizontalAlignment="Left" Width="397" TextAlignment="Center" Grid.Row="1" Margin="360,16,0,0"/>
+        <Button x:Name="LetsGo" Content="LetsGo"  Style="{StaticResource FancyButtonStyle}" VerticalAlignment="Top" Height="34" FontFamily="Forte" Margin="365,344,0,0" Click="LetsGo_Click" HorizontalAlignment="Left" Width="65" Grid.RowSpan="2"/>
+        <Button  x:Name="playButton" Content="Play"  Style="{StaticResource FancyButtonStyle}" Height="32" VerticalAlignment="Top" FontFamily="Forte" Margin="699,344,0,0" Click="Play_Click" HorizontalAlignment="Left" Width="65" Grid.RowSpan="2"/>
         <TextBlock x:Name="ComputerName"
             Text="Computer"
             FontSize="60"
             VerticalAlignment="Top"
             RenderTransformOrigin="0.298,-0.8"
-            Foreground="Black"
-            FontStyle="Italic"  FontWeight="Bold" Height="62" HorizontalAlignment="Left" Width="397" TextAlignment="Center" Margin="360,279,0,0" FontFamily="Modern No. 20"/>
+            Foreground="Black"  FontWeight="Bold" Height="62" HorizontalAlignment="Left" Width="397" TextAlignment="Center" Margin="360,279,0,0" FontFamily="Modern No. 20"/>
 
 
 

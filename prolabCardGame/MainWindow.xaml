@@ -63,8 +63,7 @@
            VerticalAlignment="Top"
            RenderTransformOrigin="0.298,-0.8"
            FontFamily="Modern No. 20"
-           Foreground="FloralWhite"
-           FontStyle="Italic" />
+           Foreground="White" FontWeight="Bold" Background="#B8430058" HorizontalAlignment="Center" OpacityMask="#FFFF0C00" />
         <Label Content="ID" HorizontalAlignment="Left" Margin="340,180,0,0" VerticalAlignment="Top" Height="24" Width="35" RenderTransformOrigin="0.386,1.527" FontSize="15" FontFamily="Modern No. 20"  >
             <Label.RenderTransform>
                 <TransformGroup>

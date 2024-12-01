@@ -37,20 +37,12 @@ namespace TestProject
                 Ucak rivalUcak = (Ucak)otherCard;
                 this.Dayaniklilik -= rivalUcak.Vurus + rivalUcak.KaraVurusAvantaji ;
 
-
-                if (rivalUcak.Dayaniklilik <= 0)
-                    this.Seviye_Puani += rivalUcak.Seviye_Puani + 10;
-
             }
 
             else if (otherCard is Obus)
             {
                 Obus rivalObus = (Obus)otherCard;
                 this.Dayaniklilik -= rivalObus.Vurus;
-
-
-                if (rivalObus.Dayaniklilik <= 0)
-                    this.Seviye_Puani += rivalObus.Seviye_Puani + 10;
 
             }
 
@@ -61,19 +53,12 @@ namespace TestProject
                 this.Dayaniklilik -= rivalFirakteyn.Vurus;
 
 
-                if (rivalFirakteyn.Dayaniklilik <= 0)
-                    this.Seviye_Puani += rivalFirakteyn.Seviye_Puani + 10;
-
             }
 
             else if (otherCard is Sida)
             {
                 Sida rivalSida = (Sida)otherCard;
                 this.Dayaniklilik -= rivalSida.Vurus + rivalSida.KaraVurusAvantaji;
-
-
-                if (rivalSida.Dayaniklilik <= 0)
-                    this.Seviye_Puani += rivalSida.Seviye_Puani + 10;
 
             }
 
@@ -82,19 +67,12 @@ namespace TestProject
                 Siha rivalSiha = (Siha)otherCard;
                 this.Dayaniklilik -= rivalSiha.Vurus + rivalSiha.KaraVurusAvantaji;
 
-
-                if (rivalSiha.Dayaniklilik <= 0)
-                    this.Seviye_Puani += rivalSiha.Seviye_Puani + 10;
-
             }
             else if (otherCard is KFS)
             {
                 KFS rivalKFS = (KFS)otherCard;
                 this.Dayaniklilik -= rivalKFS.Vurus;
 
-
-                if (rivalKFS.Dayaniklilik <= 0)
-                    this.Seviye_Puani += rivalKFS.Seviye_Puani + 10;
             }
 
            

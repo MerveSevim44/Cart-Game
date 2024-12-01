@@ -17,6 +17,10 @@ namespace TestProject
         public override int ID { get; set; } = 030200;
         public static int sayac { get; set; } = 0;
 
+        public override string ToString()
+        {
+            return $"{AltSinif}";
+        }
         public KFS(int seviyePuani, string sinif,int dayaniklilik, int Secilme_sayisi, string altSinif) : base(seviyePuani, sinif)
         {
             ID += ++sayac;
@@ -30,18 +34,12 @@ namespace TestProject
                 Ucak rivalUcak = (Ucak)otherCard;
                 this.Dayaniklilik -= rivalUcak.Vurus + rivalUcak.KaraVurusAvantaji;
 
-                if (rivalUcak.Dayaniklilik <= 0)
-                    this.Seviye_Puani += rivalUcak.Seviye_Puani + 10;
             }
 
             else if (otherCard is Obus)
             {
                 Obus rivalObus = (Obus)otherCard;
                 this.Dayaniklilik -= rivalObus.Vurus;
-
-                if (rivalObus.Dayaniklilik <= 0)
-                    this.Seviye_Puani += rivalObus.Seviye_Puani + 10;
-
 
             }
 
@@ -52,9 +50,6 @@ namespace TestProject
                 this.Dayaniklilik -= rivalFirakteyn.Vurus;
 
 
-                if (rivalFirakteyn.Dayaniklilik <= 0)
-                    this.Seviye_Puani += rivalFirakteyn.Seviye_Puani + 10;
-
 
             }
 
@@ -64,8 +59,6 @@ namespace TestProject
                 this.Dayaniklilik -= rivalSida.Vurus + rivalSida.KaraVurusAvantaji;
 
 
-                if (rivalSida.Dayaniklilik <= 0)
-                    this.Seviye_Puani += rivalSida.Seviye_Puani + 10;
 
             }
 
@@ -75,19 +68,12 @@ namespace TestProject
                 this.Dayaniklilik -= rivalSiha.Vurus + rivalSiha.KaraVurusAvantaji;
 
 
-                if (rivalSiha.Dayaniklilik <= 0)
-                    this.Seviye_Puani += rivalSiha.Seviye_Puani + 10;
-
-
             }
             else if (otherCard is KFS)
             {
                 KFS rivalKFS = (KFS)otherCard;
                 this.Dayaniklilik -= rivalKFS.Vurus ;
 
-
-                if (rivalKFS.Dayaniklilik <= 0)
-                    this.Seviye_Puani += rivalKFS.Seviye_Puani + 10;
 
             }
 
