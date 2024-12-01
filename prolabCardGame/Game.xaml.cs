@@ -9,6 +9,7 @@ using System.Windows.Media;
 using System.Windows.Media.Effects;
 using System.Windows.Media.Imaging;
 using System.IO;
+using System.Diagnostics;
 
 namespace TestProject
 {
@@ -38,7 +39,7 @@ namespace TestProject
             playerName.Text = UserName;
             LetsGo.IsEnabled = false;
             CardsComputer = computer.KartSec();
-
+            if (File.Exists("log.txt")) File.Delete("log.txt");
             ReshowCards();
         }
 
@@ -305,7 +306,7 @@ namespace TestProject
                 log("Game Over!.");
                 log($"Scores :\nComputer : {computer.Skor}\n{playerName.Text}: {player.Skor}");
                 log($"THE WINNER IS {winner.ToUpper()}");
-
+                Process.Start("log.txt");
                 Application.Current.Shutdown();
             }
 
@@ -345,6 +346,7 @@ namespace TestProject
 
             log($"Player Durability: {playerDurability}\nComputer Durability: {computerDurability}");
         }
+        
         private void randomSelectComputerCards()
         {
             computerSelectedCards.Clear();
@@ -362,7 +364,6 @@ namespace TestProject
                 cardsCopy.RemoveAt(randIndex);
             }
         }
-
 
 
         private void showSelected(List<Savas_Araclari> cards, int yPosition, bool isPlayer)
