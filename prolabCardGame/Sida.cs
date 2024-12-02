@@ -74,11 +74,5 @@ namespace TestProject
             }
 
         }
-
-
-        public override void KartPuaniGoster()
-        {
-            base.KartPuaniGoster();
-        }
     }
 }

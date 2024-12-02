@@ -18,7 +18,7 @@ namespace TestProject
     {
         List<Canvas> selectedCanvasesP = new List<Canvas>();
         List<Canvas> selectedCanvasesC = new List<Canvas>();
-        Oyuncu player = new Oyuncu(10, "Oyuncu", 0);
+        Oyuncu player = new Oyuncu(10, "Player", 0);
         Oyuncu computer = new Oyuncu();
 
         List<Savas_Araclari> Cards = new List<Savas_Araclari>();
@@ -46,6 +46,9 @@ namespace TestProject
 
         private void addCanvases(List<Savas_Araclari> cards, int yPosition, bool show)
         {
+            Savas_Araclari temp = cards[0];
+            cards[0] = cards[cards.Count - 1];
+            cards[cards.Count - 1] = temp;
             double cardSpacing = 300 * sizeFactor;
             double totalWidth = cards.Count * cardSpacing;
             int centerX = (int)SystemParameters.PrimaryScreenWidth / 2;
@@ -100,14 +103,13 @@ namespace TestProject
         private void AddCardLabels(Canvas canvas, Savas_Araclari card)
         {
             if (card == null) return;
+            List<Label> labels = new List<Label> {
+                CreateLabel(card.Dayaniklilik.ToString(), 49 * sizeFactor, 20 * sizeFactor, 85 * sizeFactor, 122 * sizeFactor, VerticalAlignment.Top) ,
+                CreateLabel(card.ID.ToString(), 49 * sizeFactor, 20 * sizeFactor, 60 * sizeFactor, 105 * sizeFactor, VerticalAlignment.Top),
+                CreateLabel(card.Seviye_Puani.ToString(), 49 * sizeFactor, 20 * sizeFactor, 90 * sizeFactor, 165 * sizeFactor, VerticalAlignment.Center)
+            };
 
-            Label label1 = CreateLabel(card.Dayaniklilik.ToString(), 49 * sizeFactor, 20 * sizeFactor, 85 * sizeFactor, 122 * sizeFactor, VerticalAlignment.Top);
-            Label label2 = CreateLabel(card.ID.ToString(), 49 * sizeFactor, 20 * sizeFactor, 60 * sizeFactor, 105 * sizeFactor, VerticalAlignment.Top);
-            Label label3 = CreateLabel(card.Seviye_Puani.ToString(), 49 * sizeFactor, 20 * sizeFactor, 90 * sizeFactor, 165 * sizeFactor, VerticalAlignment.Center);
-
-            canvas.Children.Add(label1);
-            canvas.Children.Add(label2);
-            canvas.Children.Add(label3);
+            card.KartPuaniGoster(canvas, card, labels);
         }
 
         private void Canvas_MouseLeftButtonDown(object sender, MouseButtonEventArgs e, Savas_Araclari card)
@@ -401,6 +403,9 @@ namespace TestProject
             {
                 writer.WriteLine(text);
             }
+
+
+
             switch (mod){
                 case 1:
                     MessageBox.Show(text);
@@ -416,13 +421,28 @@ namespace TestProject
                     break;
             }
         }
-        private void sound(string file)
-        {/*
-            file = System.IO.Path.Combine("sounds", file);
-            // Set the sound file path
-            ClickSound.SoundLocation = file;
-            ClickSound.Play(); // Play the sound*/
+
+    private void sound(string file)
+        {
+            try
+            {
+                string filePath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, file);
+                if (System.IO.File.Exists(filePath))
+                {
+                    SoundPlayer player = new SoundPlayer(filePath);
+                    player.Play();
+                }
+                else
+                {
+                    MessageBox.Show($"The file {file} was not found!", "File Not Found", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"An error occurred while trying to play the sound: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
+
 
     }
 }

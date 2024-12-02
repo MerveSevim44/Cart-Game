@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 
 namespace TestProject
 {
@@ -24,9 +25,10 @@ namespace TestProject
             Seviye_Puani = seviyePuani; 
         }     
 
-        public virtual void KartPuaniGoster()
+        public virtual void KartPuaniGoster(Canvas canvas, Savas_Araclari card, List<Label> labels)
         {
-            
+            foreach (var label in labels)
+                canvas.Children.Add(label);
         }
 
         public abstract void DurumGuncelle(Savas_Araclari otherCard);
