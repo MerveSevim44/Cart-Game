@@ -1,0 +1,18 @@
+Please select 3 cards before proceeding.
+Step 1:
+Player's Card (ID: 30102, Durability: 0)
+Computer's Card (ID: 10103, Durability: 10)
+Computer's card (ID: 10103) eliminates Player's card (ID: 30102)!
+Step 2:
+Player's Card (ID: 20203, Durability: 15)
+Computer's Card (ID: 20206, Durability: 15)
+Step 3:
+Player's Card (ID: 30101, Durability: 10)
+Computer's Card (ID: 30103, Durability: 10)
+Comparison complete!
+Player Durability: 0, 15, 10
+Computer Durability: 10, 15, 10
+Scores :
+Computer : 10
+e: 0
+Round 1 complete! Cards have been updated.
