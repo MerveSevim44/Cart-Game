@@ -26,8 +26,8 @@ namespace TestProject
 
         List<Savas_Araclari> playerSelectedCards = new List<Savas_Araclari>();
         List<Savas_Araclari> computerSelectedCards = new List<Savas_Araclari>();
-        private SoundPlayer ClickSound;
-        double sizeFactor = 1.2;
+        private SoundPlayer ClickSound = new SoundPlayer();
+        double sizeFactor = 1.0;
         private int currentStep = 0;
         private int currentRound = 0;
         private const int totalRounds = 5;
@@ -36,19 +36,16 @@ namespace TestProject
         {
             InitializeComponent();
             Cards = player.KartSec();
-            ClickSound = new SoundPlayer();
             playerName.Text = UserName;
-            LetsGo.IsEnabled = false;
             CardsComputer = computer.KartSec();
+            LetsGo.IsEnabled = false;
             if (File.Exists("log.txt")) File.Delete("log.txt");
             ReshowCards();
         }
 
         private void addCanvases(List<Savas_Araclari> cards, int yPosition, bool show)
         {
-            Savas_Araclari temp = cards[0];
-            cards[0] = cards[cards.Count - 1];
-            cards[cards.Count - 1] = temp;
+
             double cardSpacing = 300 * sizeFactor;
             double totalWidth = cards.Count * cardSpacing;
             int centerX = (int)SystemParameters.PrimaryScreenWidth / 2;
@@ -66,25 +63,24 @@ namespace TestProject
             }
         }
 
+
         private Canvas CreateCanvas(Savas_Araclari card, double xPosition, int yPosition, bool show)
         {
-            if (card == null)
-                throw new ArgumentNullException(nameof(card), "Card cannot be null.");
-
+            
             Canvas canvas = new Canvas
             {
                 Margin = new Thickness(xPosition, yPosition, 0, 0),
-                Tag = card,
                 Width = 131 * sizeFactor,
-                Height = 202 * sizeFactor
+                Height = 202 * sizeFactor,
+                Tag = card
             };
             String path = "/image/" + (show ? card.ToString() : "backSide") + ".png";
             Image cardImage = new Image
             {
                 Source = new BitmapImage(new Uri(path, UriKind.Relative)),
                 Stretch = Stretch.Uniform,
-                Height = 202 * sizeFactor,
                 Width = 131 * sizeFactor,
+                Height = 202 * sizeFactor,
                 Tag = card
             };
 
@@ -99,7 +95,7 @@ namespace TestProject
 
             return canvas;
         }
-
+       
         private void AddCardLabels(Canvas canvas, Savas_Araclari card)
         {
             if (card == null) return;
@@ -144,6 +140,7 @@ namespace TestProject
 
                 card.selecTimes--;
                 RemoveSelectedEffect(sender as Canvas);
+                sound("Secme.wav");
             }
             else
             {
@@ -178,7 +175,7 @@ namespace TestProject
                 Width = width,
                 Height = height,
                 FontFamily = new FontFamily("Times New Roman"),
-                FontSize = 9,
+                FontSize = 9*sizeFactor,
                 HorizontalAlignment = HorizontalAlignment.Left,
                 VerticalAlignment = verticalAlignment,
                 Margin = new Thickness(left, top, 0, 0)
@@ -199,11 +196,11 @@ namespace TestProject
                 log("Please select 3 cards before proceeding.",4);
                 return;
             }
+            sound("Play.wav");
             playButton.IsEnabled = false;
 
             randomSelectComputerCards();
             RemoveUnselectedCards();
-            sound("Play.wav");
             StartStepByStepComparison();
             LetsGo.IsEnabled = true;
 
@@ -246,8 +243,9 @@ namespace TestProject
                 await Task.Delay(1000);
             }
 
-            log("Comparison complete!", 2);
             DisplayUpdatedDurability();
+            log($"Scores :\nComputer : {computer.Skor}\n{playerName.Text}: {player.Skor}");
+            log($"Round {currentRound+1} complete! Cards have been updated.", 2);
         }
 
         private void AddNewCards()
@@ -274,9 +272,11 @@ namespace TestProject
 
         private void LetsGo_Click(object sender, RoutedEventArgs e)
         {
+
+            sound("Letsgo.wav");
             LetsGo.IsEnabled = false;
             calculateScore();
-            log($"Scores :\nComputer : {computer.Skor}\n{playerName.Text}: {player.Skor}");
+            
             currentRound++;
 
             if (currentRound > totalRounds || Cards.Count == 0 || CardsComputer.Count == 0)
@@ -307,7 +307,6 @@ namespace TestProject
                 Application.Current.Shutdown();
             }
 
-            log($"Round {currentRound} complete! Cards have been updated.");
 
             AddNewCards();
 
@@ -315,7 +314,6 @@ namespace TestProject
             computerSelectedCards.Clear();
 
             ReshowCards();
-            sound("Letsgo.wav");
             playButton.IsEnabled = true;
         }
 
@@ -397,7 +395,7 @@ namespace TestProject
             }
         }
 
-        static void log(string text,int mod=1)
+        static void log(string text,int status = 1)
         {
             using (StreamWriter writer = new StreamWriter("log.txt", append: true))
             {
@@ -406,7 +404,8 @@ namespace TestProject
 
 
 
-            switch (mod){
+            switch (status)
+            {
                 case 1:
                     MessageBox.Show(text);
                     break;
@@ -446,6 +445,3 @@ namespace TestProject
 
     }
 }
-
-
- 
