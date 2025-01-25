@@ -1,0 +1,7 @@
+C:\Users\merve\OneDrive\Desktop\CardClash\CardClash\obj\Release\CardClash.csproj.AssemblyReference.cache
+C:\Users\merve\OneDrive\Desktop\CardClash\CardClash\obj\Release\Game.g.cs
+C:\Users\merve\OneDrive\Desktop\CardClash\CardClash\obj\Release\MainWindow.g.cs
+C:\Users\merve\OneDrive\Desktop\CardClash\CardClash\obj\Release\NewGame.g.cs
+C:\Users\merve\OneDrive\Desktop\CardClash\CardClash\obj\Release\App.g.cs
+C:\Users\merve\OneDrive\Desktop\CardClash\CardClash\obj\Release\CardClash_MarkupCompile.cache
+C:\Users\merve\OneDrive\Desktop\CardClash\CardClash\obj\Release\CardClash_MarkupCompile.lref
