@@ -115,9 +115,6 @@
             </li>
         </ul>
     </li>
-    <li>
-        <p><strong>README.md</strong>: This file, providing an overview of the project.</p>
-    </li>
 </ul>
 <h2>Contributors</h2>
 <ul>
