@@ -1,4 +1,4 @@
-<h1>Machines of War: Card Duel</h1>
+<h1>Strategic Card Warfare</h1>
 <p>Welcome to the <strong>Card-Game</strong> repository! This project is a card-based game developed in C# using WPF
     (Windows Presentation Foundation). The game involves strategic card battles between a player and a computer, with
     various types of cards representing different military vehicles (air, land, and sea). The game features a
