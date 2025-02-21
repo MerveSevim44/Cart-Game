@@ -56,14 +56,6 @@
     <li>
         <p>Clone the repository to your local machine:</p>
         <div class="md-code-block">
-            <div class="md-code-block-banner-wrap">
-                <div class="md-code-block-banner">
-                    <div class="md-code-block-infostring">bash</div>
-                    <div class="md-code-block-action">
-                        <div class="ds-markdown-code-copy-button">Copy</div>
-                    </div>
-                </div>
-            </div>
             <pre><span class="token function">git</span> clone https://github.com/MerveSevim44/Card-Game.git</pre>
         </div>
     </li>
